@@ -468,7 +468,7 @@ state = radio_semtech->setDataShaping(RADIOLIB_SHAPING_0_5);
 ```cpp
 // From radiolib.cpp lr11xx_reconfigure_protocol(), LoRa branch:
 
-state = radio_semtech->setPacketType(RADIOLIB_LR11X0_LORA_SYNC_WORD_PRIVATE);
+state = radio_semtech->setPacketType(RADIOLIB_LR11X0_PACKET_TYPE_LORA);
 
 // Bandwidth: 250 kHz (FANET Zone 1 standard)
 state = radio_semtech->setBandwidth(250.0);
