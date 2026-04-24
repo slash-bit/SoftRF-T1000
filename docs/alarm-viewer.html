@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alarm Log Viewer - SoftRF-PG Docs</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      SoftRF-PG Docs
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About SoftRF</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="t1000e.html">T1000E Card User Guide</a>
+      <a href="under-the-hood.html">Under the Hood</a>
+      <a href="configurator.html">Configurator</a>
+      <a href="alarm-viewer.html" class="active">Alarm Viewer</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-title">On this page</div>
+      <nav class="sidebar-nav">
+        <a href="#overview">Overview</a>
+        <a href="#accessing">Accessing the Viewer</a>
+        <a href="#getting-logs">Getting Your Logs</a>
+        <a href="#using-viewer">Using the Viewer</a>
+        <a href="#uploading" class="indent">Uploading Files</a>
+        <a href="#summary-stats" class="indent">Summary Stats</a>
+        <a href="#map-view" class="indent">Map View</a>
+        <a href="#alarm-table" class="indent">Alarm Table</a>
+        <a href="#igc-overlay">IGC Flight Track</a>
+        <a href="#alarm-levels">Alarm Levels</a>
+        <a href="#log-format">Log File Format</a>
+        <a href="#tips">Tips</a>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-card">
+
+      <h1>SoftRF Alarm Log Viewer</h1>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Visualize collision alarm events on an interactive map with flight track overlay.</p>
+
+      <h2 id="overview">Overview</h2>
+      <p>The Alarm Log Viewer is a web-based tool that visualizes the alarm events recorded by SoftRF during flight. It displays alarm positions on an interactive OpenStreetMap map, color-coded by severity level, with optional IGC flight track overlay.</p>
+
+      <p>Key features:</p>
+      <ul>
+        <li>Drag-and-drop file upload for alarm logs and IGC files</li>
+        <li>Interactive map with alarm markers showing direction, distance, and details</li>
+        <li>Summary statistics: total alarms, level breakdown, time span, aircraft count</li>
+        <li>Sortable alarm event table</li>
+        <li>Clock-bearing indicators showing relative direction to threat aircraft</li>
+        <li>Aircraft ID lookup from database (on the hosted version)</li>
+        <li>Optional IGC flight track overlay with altitude at alarm time</li>
+      </ul>
+
+      <h2 id="accessing">Accessing the Viewer</h2>
+      <p>The Alarm Log Viewer is hosted at:</p>
+      <p style="text-align:center; font-size: 18px;"><a href="https://ogn.helioho.st/mysoftrf/myalarms.php">https://ogn.helioho.st/mysoftrf/myalarms.php</a></p>
+      <p>It will also be available at:<br>
+      <a href="https://slash-bit.github.io/SoftRF-PG/alarm-viewer.html">https://slash-bit.github.io/SoftRF-PG/alarm-viewer.html</a></p>
+
+      <div class="info-box">
+        <strong>No Server Required</strong>
+        The alarm viewer processes files entirely in your browser. No data is uploaded to any server. The hosted version additionally looks up aircraft IDs from a database.
+      </div>
+
+      <h2 id="getting-logs">Getting Your Alarm Logs</h2>
+      <p>To generate alarm logs, enable the <code>alarmlog</code> setting (set to <code>1</code>) in your SoftRF configuration.</p>
+
+      <h3>Downloading from T-Beam</h3>
+      <ol>
+        <li>Connect to the SoftRF web interface</li>
+        <li>On the status page, find the "Alarm Log" section</li>
+        <li>Click <strong>[Download]</strong> to save <code>alarmlog.txt</code></li>
+      </ol>
+
+      <h3>Downloading from T-Echo</h3>
+      <ol>
+        <li>Connect T-Echo to computer via USB</li>
+        <li>Open the mass storage drive</li>
+        <li>Copy <code>alarmlog.txt</code> to your computer</li>
+      </ol>
+
+      <h2 id="using-viewer">Using the Viewer</h2>
+
+      <h3 id="uploading">Uploading Files</h3>
+      <p>The viewer has two upload areas:</p>
+      <ul>
+        <li><strong>Left area</strong> &mdash; Drag and drop (or click to browse) your <code>alarmlog.txt</code> file. This is required.</li>
+        <li><strong>Right area</strong> &mdash; Optionally add an <code>.IGC</code> flight log file to overlay your flight track on the map.</li>
+      </ul>
+      <p>When a file is loaded, its upload area turns green with the filename displayed.</p>
+
+      <h3 id="summary-stats">Summary Statistics</h3>
+      <p>After loading the alarm log, summary cards appear showing:</p>
+      <table>
+        <thead><tr><th>Statistic</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Total Alarms</strong></td><td>Number of alarm events in the file</td></tr>
+          <tr><td><strong>Level 1 &ndash; Low</strong></td><td>Count of low-urgency alarms (&le;19s to collision)</td></tr>
+          <tr><td><strong>Level 2 &ndash; Important</strong></td><td>Count of medium-urgency alarms (&le;13s)</td></tr>
+          <tr><td><strong>Level 3 &ndash; Urgent</strong></td><td>Count of high-urgency alarms (&le;9s)</td></tr>
+          <tr><td><strong>Span</strong></td><td>Time duration between first and last alarm</td></tr>
+          <tr><td><strong>Aircraft</strong></td><td>Number of distinct aircraft IDs in the log</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="map-view">Map View</h3>
+      <p>The map shows:</p>
+      <ul>
+        <li><strong>Green circle</strong> &mdash; Takeoff position (if recorded in the log)</li>
+        <li><strong>Colored circles</strong> &mdash; Alarm positions, sized and colored by alarm level:
+          <ul>
+            <li>Yellow = Level 1 (Low)</li>
+            <li>Orange = Level 2 (Important)</li>
+            <li>Red = Level 3 (Urgent)</li>
+          </ul>
+        </li>
+        <li><strong>Clock-hand needles</strong> &mdash; Short lines showing the relative bearing to the threat aircraft</li>
+        <li><strong>Numbered labels</strong> &mdash; Level 3 alarms show their sequence number</li>
+        <li><strong>Dashed line</strong> &mdash; Connects alarm positions (shown when no IGC track is loaded)</li>
+      </ul>
+      <p>Click any alarm marker for a popup with details: time, aircraft ID, direction, horizontal and vertical distance, and GPS altitude (if IGC loaded).</p>
+
+      <h3 id="alarm-table">Alarm Table</h3>
+      <p>Below the map, a scrollable table lists every alarm event with columns:</p>
+      <table>
+        <thead><tr><th>Column</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>#</td><td>Sequence number</td></tr>
+          <tr><td>Time (UTC)</td><td>Time of alarm event</td></tr>
+          <tr><td>Level</td><td>Alarm severity (Low/Important/Urgent)</td></tr>
+          <tr><td>ID</td><td>Aircraft hex ID (with name if found in database)</td></tr>
+          <tr><td>Direction</td><td>Relative bearing as clock position</td></tr>
+          <tr><td>H Dist (m)</td><td>Horizontal distance in meters</td></tr>
+          <tr><td>V Dist (m)</td><td>Vertical distance in meters (+ = above, - = below)</td></tr>
+          <tr><td>Lat / Lon</td><td>Position coordinates</td></tr>
+        </tbody>
+      </table>
+      <p>Click any row to center the map on that alarm's position.</p>
+
+      <h2 id="igc-overlay">IGC Flight Track Overlay</h2>
+      <p>Loading an IGC file adds a blue flight track line to the map. When an IGC track is present:</p>
+      <ul>
+        <li>The dashed alarm path line is hidden (the flight track replaces it)</li>
+        <li>Alarm popups show GPS altitude at the time of each alarm</li>
+        <li>A legend item shows the "IGC flight track" indicator</li>
+      </ul>
+
+      <h2 id="alarm-levels">Understanding Alarm Levels</h2>
+      <table>
+        <thead><tr><th>Level</th><th>Urgency</th><th>Time to Collision</th><th>Map Color</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Low</td><td>&le; 19 seconds</td><td style="background:#fff3e0; color:#b45309;">Yellow</td></tr>
+          <tr><td>2</td><td>Important</td><td>&le; 13 seconds</td><td style="background:#fff0e6; color:#c2410c;">Orange</td></tr>
+          <tr><td>3</td><td>Urgent</td><td>&le; 9 seconds</td><td style="background:#fee2e2; color:#b91c1c;">Red</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="log-format">Alarm Log File Format</h2>
+      <p>The <code>alarmlog.txt</code> file is plain text with the following structure:</p>
+
+<pre><code>takeoff: 230415 121530 32.12345,34.56789
+date,time,lat,N/S,lon,E/W,level,count,id,bearing,hdist,vdist
+230415,121645,3207.407,N,03434.073,E,1,1,A8B031,14,1200,57
+230415,121647,3207.412,N,03434.081,E,2,2,A8B031,12,800,43</code></pre>
+
+      <p>Fields:</p>
+      <ul>
+        <li><strong>Takeoff line</strong> (optional): date, time, latitude, longitude</li>
+        <li><strong>Data fields</strong>: date (DDMMYY), time (HHMMSS), latitude (NMEA format), N/S, longitude (NMEA format), E/W, alarm level (1-3), consecutive count, aircraft hex ID, relative bearing (degrees), horizontal distance (meters), vertical distance (meters)</li>
+      </ul>
+
+      <h2 id="tips">Tips</h2>
+      <ul>
+        <li>Download alarm logs regularly and clear them to free space on the device</li>
+        <li>Pair with the corresponding IGC flight log for best visualization</li>
+        <li>Use the hosted version at <a href="https://ogn.helioho.st/mysoftrf/myalarms.php">ogn.helioho.st</a> for aircraft ID lookup</li>
+        <li>Level 3 alarms deserve attention &mdash; review the pattern of encounters</li>
+        <li>If you see many alarms from the same ID in thermals, that's normal with nearby traffic</li>
+      </ul>
+
+    </div>
+  </main>
+</div>
+
+<a href="#" class="back-to-top" aria-label="Back to top">&uarr;</a>
+
+<footer class="site-footer">
+  <p>SoftRF-PG Documentation &mdash; Based on Moshe Braner's SoftRF (version MB174)</p>
+  <p><a href="https://github.com/slash-bit/SoftRF-PG">GitHub</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

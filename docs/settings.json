@@ -1,0 +1,25 @@
+
+{
+  "class": "SOFTRF",
+  "protocol": "FANET",
+  "altprotocol": "NONE",
+  "band": "EU",
+  "aircraft_type": "PARAGLIDER",
+  "aircraft_id": "88BB50",
+  "id_method": "DEVICE",
+  "alarm": "LATEST",
+  "alarm_filter": "NONE",
+  "txpower": "FULL",
+  "volume": "FULL",
+  "ignore_id": "000000",
+  "alarmlog": "YES",
+  "auto_sos": "NO",
+  "logflight": "AIRBORNE",
+  "loginterval": 4,
+  "igc_pilot": "Chuck Yeager",
+  "igc_type": "Ozone",
+  "igc_reg": "Delta4",
+  "fanet_name": "Chuck",
+  "debug_flags": "000000",
+  "sw_version": "SoftRF-MB177-VB008j-dev"
+}

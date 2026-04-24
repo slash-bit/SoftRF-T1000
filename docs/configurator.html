@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebApp Configurator - SoftRF-PG Docs</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      SoftRF-PG Docs
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About SoftRF</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="t1000e.html">T1000E Card User Guide</a>
+      <a href="under-the-hood.html">Under the Hood</a>
+      <a href="configurator.html" class="active">Configurator</a>
+      <a href="alarm-viewer.html">Alarm Viewer</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-title">On this page</div>
+      <nav class="sidebar-nav">
+        <a href="#overview">Overview</a>
+        <a href="#accessing">Accessing the WebApp</a>
+        <a href="#connecting" class="indent">Connecting via WiFi</a>
+        <a href="#external-wifi" class="indent">External WiFi</a>
+        <a href="#status-page">Status Page</a>
+        <a href="#basic-settings">Basic Settings</a>
+        <a href="#advanced-settings">Advanced Settings</a>
+        <a href="#firmware-update">Firmware Update</a>
+        <a href="#file-management">File Management</a>
+        <a href="#flight-logs" class="indent">Flight Logs</a>
+        <a href="#alarm-log" class="indent">Alarm Log</a>
+        <a href="#settings-backup" class="indent">Settings Backup</a>
+        <a href="#voice-upload" class="indent">Voice Files</a>
+        <a href="#landed-out">Landed-Out Mode</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+        <a href="#hosted-webapp">Hosted WebApp</a>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-card">
+
+      <h1>SoftRF WebApp Configurator</h1>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">How to use the web-based configurator to manage your SoftRF device.</p>
+
+      <h2 id="overview">Overview</h2>
+      <p>The SoftRF WebApp Configurator is a built-in web interface available on T-Beam devices. It allows you to:</p>
+      <ul>
+        <li>View device status and GNSS information</li>
+        <li>Change basic and advanced settings</li>
+        <li>Update firmware over WiFi (OTA)</li>
+        <li>Download and manage flight logs</li>
+        <li>Download alarm logs</li>
+        <li>Upload voice files and other data</li>
+        <li>Backup and restore settings</li>
+      </ul>
+
+      <div class="info-box">
+        <strong>T-Beam Only</strong>
+        The web interface is only available on T-Beam devices (which have WiFi). T-Echo devices must use USB file editing or NMEA commands instead.
+      </div>
+
+      <p>A hosted version of the configurator WebApp is also available at:<br>
+      <a href="https://ogn.helioho.st/mysoftrf/">https://ogn.helioho.st/mysoftrf/</a></p>
+
+      <h2 id="accessing">Accessing the WebApp</h2>
+
+      <h3 id="connecting">Connecting via SoftRF WiFi</h3>
+      <ol>
+        <li>Power on your T-Beam</li>
+        <li>On your phone/tablet/computer, look for the WiFi network named <code>SoftRF-xxxxxx</code> (where xxxxxx is the device ID)</li>
+        <li>Connect using password <code>12345678</code></li>
+        <li>Your device may warn "no internet access" &mdash; that's correct, allow it</li>
+        <li>Open a web browser and go to <code>http://192.168.1.1</code></li>
+      </ol>
+
+      <div class="info-box tip">
+        <strong>Custom Network Name</strong>
+        You can customize the WiFi network name using the <code>myssid</code> setting. The password remains <code>12345678</code> and the IP is always <code>192.168.1.1</code>.
+      </div>
+
+      <h3 id="external-wifi">Using an External WiFi Network</h3>
+      <p>If you configure SoftRF to connect to an existing WiFi network (via the <code>ssid</code> and <code>psk</code> settings):</p>
+      <ol>
+        <li>SoftRF tries to connect for 10 seconds after boot</li>
+        <li>If successful, connect your phone/computer to the same network</li>
+        <li>Check the OLED display (4th or 5th page) for the assigned IP address</li>
+        <li>Browse to that IP address</li>
+      </ol>
+      <p>If the connection fails, SoftRF falls back to creating its own network.</p>
+
+      <h2 id="status-page">Status Page</h2>
+      <p>The home page shows:</p>
+      <ul>
+        <li><strong>Firmware version</strong> &mdash; current installed version</li>
+        <li><strong>Device ID</strong> &mdash; unique hardware identifier</li>
+        <li><strong>Aircraft ID</strong> &mdash; transmitted ID and type</li>
+        <li><strong>GNSS status</strong> &mdash; fix quality, satellite count, leap seconds</li>
+        <li><strong>Altitude</strong> &mdash; both ellipsoid and MSL, plus geoid separation</li>
+        <li><strong>Battery voltage</strong> &mdash; current charge level</li>
+        <li><strong>Radio info</strong> &mdash; protocol, band, packets sent/received, max RSSI</li>
+        <li><strong>WiFi/Bluetooth status</strong></li>
+        <li><strong>Settings status</strong> &mdash; whether settings were preserved or reset</li>
+      </ul>
+
+      <p>Action buttons on the status page:</p>
+      <ul>
+        <li><strong>Basic Settings</strong> &mdash; essential configuration</li>
+        <li><strong>Advanced Settings</strong> &mdash; all settings with raw codes</li>
+        <li><strong>Firmware Update</strong> &mdash; OTA firmware upload</li>
+        <li><strong>Landed-Out Mode</strong> &mdash; activate relay mode for landed aircraft</li>
+        <li><strong>Flight log buttons</strong> &mdash; download, list, clear</li>
+        <li><strong>Alarm log buttons</strong> &mdash; download, clear</li>
+        <li><strong>File management</strong> &mdash; upload, manage SPIFFS files</li>
+        <li><strong>Reset GNSS</strong> &mdash; factory-reset GNSS module and cold-start</li>
+      </ul>
+
+      <h2 id="basic-settings">Basic Settings Page</h2>
+      <p>The basic settings page (since MB153) shows a shorter, cleaner form with the most commonly needed settings:</p>
+      <ul>
+        <li>Mode (Normal, GNSS Bridge)</li>
+        <li>Aircraft ID and ID type</li>
+        <li>Protocol, Region, Aircraft type</li>
+        <li>Alarm trigger method</li>
+        <li>Volume (buzzer)</li>
+        <li>Bluetooth mode</li>
+        <li>NMEA output destinations and sentence types</li>
+        <li>Flight logging options</li>
+        <li>Stealth and No-track flags</li>
+      </ul>
+      <p>After changing settings, scroll to the bottom and click <strong>"Save and Reboot"</strong>. Reconnect to WiFi afterward and verify your settings took effect.</p>
+
+      <div class="info-box warning">
+        <strong>Backup Note</strong>
+        Clicking "Save and Reboot" automatically backs up the previous settings file. You can revert by clicking "Restore/Swap" on the status page.
+      </div>
+
+      <h2 id="advanced-settings">Advanced Settings Page</h2>
+      <p>The advanced settings page shows all settings with their raw numeric codes and comments explaining values. You can enter codes directly. See the <a href="under-the-hood.html#advanced-settings">Under the Hood</a> page for code reference.</p>
+
+      <h2 id="firmware-update">Firmware Update</h2>
+      <ol>
+        <li>Download the latest .bin firmware (~1.7 MB) from <a href="https://github.com/moshe-braner/SoftRF/tree/master/software/firmware/binaries/ESP32/SoftRF">GitHub</a></li>
+        <li>Ensure the battery is fully charged</li>
+        <li>Click "Firmware Update" on the status page</li>
+        <li>Choose the .bin file and click "Update"</li>
+        <li>Wait for "UPDATE DONE, REBOOTING" (may take over a minute)</li>
+        <li>The OLED counter increments during upload; blue LED flashes once/second</li>
+        <li>Do not touch anything for a full minute after completion</li>
+      </ol>
+
+      <div class="info-box warning">
+        <strong>WiFi Interference</strong>
+        If a stronger external WiFi network is nearby, your device may switch networks mid-update, causing failure. Move away from external networks or configure SoftRF to use the external network.
+      </div>
+
+      <h2 id="file-management">File Management</h2>
+
+      <h3 id="flight-logs">Flight Logs</h3>
+      <p>The status page shows buttons depending on the logging destination:</p>
+      <ul>
+        <li><strong>RAM/Flash logging:</strong> "Download Current", "List Archived", "Clear Archive"</li>
+        <li><strong>SD card logging:</strong> "Download Latest", "List Files", "Clear Files"</li>
+      </ul>
+      <p>Compressed logs (.IGZ) on T-Beam are automatically decompressed when downloaded through the web interface.</p>
+
+      <h3 id="alarm-log">Alarm Log</h3>
+      <p>If alarm logging is enabled (<code>alarmlog=1</code>), each collision alarm event is recorded to <code>alarmlog.txt</code>. Use the "Download" button to retrieve it, or "Clear" to start fresh. View the log visually with the <a href="alarm-viewer.html">Alarm Log Viewer</a>.</p>
+
+      <h3 id="settings-backup">Settings Backup and Restore</h3>
+      <ul>
+        <li><strong>Download</strong> &mdash; Save settings.txt to your computer</li>
+        <li><strong>Upload</strong> &mdash; Upload an edited settings.txt (takes effect after reboot)</li>
+        <li><strong>Backup</strong> &mdash; Copy current settings to settingb.txt internally</li>
+        <li><strong>Restore/Swap</strong> &mdash; Swap settings.txt with settingb.txt and reboot</li>
+      </ul>
+
+      <h3 id="voice-upload">Voice Files</h3>
+      <p>Upload the <code>waves.tar</code> file (17 WAV files, ~150 KB total) using the upload button at the bottom of the status page. The status page should then show "17 WAV files found".</p>
+
+      <h2 id="landed-out">Landed-Out Mode</h2>
+      <p>Activate via the button on the status page, or via a long-press of the middle button on T-Beam. In this mode, the aircraft type is set to zero, marking the device for relay by airborne aircraft. This extends the range at which the landed aircraft can be seen.</p>
+
+      <h2 id="troubleshooting">Troubleshooting</h2>
+
+      <h3>Cannot access the web interface</h3>
+      <ul>
+        <li>Ensure you're connected to the correct WiFi network</li>
+        <li>Try the IP address <code>192.168.1.1</code> (for SoftRF's own network)</li>
+        <li>If Bluetooth is active, the web interface may be disabled due to memory &mdash; a notice will appear</li>
+        <li>Try recovery via USB terminal and NMEA config commands</li>
+      </ul>
+
+      <h3>Settings were reset after firmware update</h3>
+      <p>This happens when changing between incompatible settings formats (e.g., mainline to Moshe's fork). Both the OLED and web page warn when this occurs. Download and keep backups of your settings.txt file.</p>
+
+      <h3>Firmware update failed</h3>
+      <ul>
+        <li>Try again ensuring stable WiFi connection</li>
+        <li>Do not start from "RC9" version via WiFi &mdash; use USB method</li>
+        <li>If the device won't boot, use the USB flashing method (ESP tool or web-based flasher)</li>
+      </ul>
+
+      <h2 id="hosted-webapp">Hosted WebApp</h2>
+      <p>A hosted version of the SoftRF configurator interface is available at:</p>
+      <p style="text-align:center; font-size: 18px;"><a href="https://ogn.helioho.st/mysoftrf/">https://ogn.helioho.st/mysoftrf/</a></p>
+      <p>This hosted version can be used for:</p>
+      <ul>
+        <li>Browsing the configurator interface without a device connected</li>
+        <li>Familiarizing yourself with the available settings before configuring your device</li>
+        <li>Reference for settings values and their meanings</li>
+      </ul>
+
+      <div class="info-box">
+        <strong>Note</strong>
+        The hosted WebApp cannot directly communicate with your SoftRF device. To change settings on your device, use the device's own web interface as described above.
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<a href="#" class="back-to-top" aria-label="Back to top">&uarr;</a>
+
+<footer class="site-footer">
+  <p>SoftRF-PG Documentation &mdash; Based on Moshe Braner's SoftRF (version MB174)</p>
+  <p><a href="https://github.com/slash-bit/SoftRF-PG">GitHub</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T1000E Card User Guide - SoftRF-PG Docs</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      SoftRF-PG Docs
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About SoftRF</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="t1000e.html" class="active">T1000E Card User Guide</a>
+      <a href="under-the-hood.html">Under the Hood</a>
+      <a href="configurator.html">Configurator</a>
+      <a href="alarm-viewer.html">Alarm Viewer</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-title">On this page</div>
+      <nav class="sidebar-nav">
+        <a href="#power-on">Power On</a>
+        <a href="#battery-status">Battery Status</a>
+        <a href="#radio-mode">Radio Mode</a>
+        <a href="#airborne">When Airborne</a>
+        <a href="#changing-settings">Changing Settings</a>
+        <a href="#protocol-mode" class="indent">Protocol Mode</a>
+        <a href="#volume" class="indent">Buzzer Volume</a>
+        <a href="#settings-file">Settings File</a>
+        <a href="#settings-reference" class="indent">All Settings Reference</a>
+        <a href="#collision-alarms">Collision Alarms</a>
+        <a href="#flight-logging">Flight Logging</a>
+        <a href="#firmware-update">Updating Firmware</a>
+        <a href="#fanet">FANET Features</a>
+        <a href="#fanet-tracking" class="indent">Ground vs Flight Tracking</a>
+        <a href="#fanet-ground-states" class="indent">Ground Tracking States</a>
+        <a href="#fanet-sos" class="indent">SOS &mdash; Pilot in Distress</a>
+        <a href="#fanet-name" class="indent">FANET Name</a>
+        <a href="#fanet-messages" class="indent">FANET Messages</a>
+        <a href="#fanet-weather" class="indent">Weather Stations</a>
+        <a href="#app-matrix">Compatible App Matrix</a>
+        <a href="#registration">Registering Your ID</a>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-card">
+
+      <h1>SenseCap T1000E Card User Guide</h1>
+
+      <h2 id="power-on">Power On</h2>
+      <p>When you first power on the device, the LED will be solid green, indicating that the battery power is good and the device is <strong>NOT airborne</strong>. The device will beep according to the battery charge level (see below). After battery beeps you will hear Operating Mode indication beeps.</p>
+
+      <h2 id="battery-status">Battery Charge Status</h2>
+      <p>After switching the device on, the battery charge status is indicated by a sequence of short beeps:</p>
+      <table>
+        <thead><tr><th>Beeps</th><th>Battery Level</th></tr></thead>
+        <tbody>
+          <tr><td><strong>5x Beep</strong></td><td>95% or more</td></tr>
+          <tr><td><strong>4x Beep</strong></td><td>75% or more</td></tr>
+          <tr><td><strong>3x Beep</strong></td><td>55% or more</td></tr>
+          <tr><td><strong>2x Beep</strong></td><td>35% or more</td></tr>
+          <tr><td><strong>1x Beep</strong></td><td>15% or more</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box warning">
+        <strong>Low Battery Warning</strong>
+        If the battery is less than 15% charged, you will hear a constant beep for one second after switching the device on. A LOW battery charge level is also indicated by a rapidly flashing LED.
+      </div>
+
+      <h2 id="radio-mode">Radio Mode</h2>
+      <p>This device supports three protocols: LEGACY (FLARM), FANET and ADS-L. The selected protocol is indicated by the following beep sequences after the battery charge beeps:</p>
+      <table>
+        <thead><tr><th>Sound</th><th>Protocol</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Two long tones</strong></td><td>FLARM mode</td></tr>
+          <tr><td><strong>Two short tones</strong></td><td>FANET mode</td></tr>
+          <tr><td><strong>One longer tone</strong></td><td>ADS-L mode</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="airborne">When Airborne</h2>
+      <p><strong>Slow Blink</strong> &mdash; The LED blinks slowly to indicate the device is in airborne mode.</p>
+
+      <h2 id="changing-settings">Changing Settings on the Go</h2>
+
+      <h3 id="protocol-mode">Protocol Mode</h3>
+      <p><strong>Double-click</strong> the button to toggle between <strong>FANET</strong> and <strong>FLARM</strong> modes. The device will reboot after the change.</p>
+      <p>Confirmation tones indicate the selected mode:</p>
+      <ul>
+        <li><strong>Two long tones</strong> &mdash; FLARM mode</li>
+        <li><strong>Two short tones</strong> &mdash; FANET mode</li>
+      </ul>
+
+      <h3 id="volume">Buzzer Sound Volume</h3>
+      <p><strong>Single-click</strong> the button to cycle through the buzzer volume levels: <strong>FULL &rarr; LOW &rarr; OFF</strong></p>
+      <table>
+        <thead><tr><th>Volume</th><th>Sound Indicator</th></tr></thead>
+        <tbody>
+          <tr><td><strong>FULL</strong></td><td>Two rising tones</td></tr>
+          <tr><td><strong>LOW</strong></td><td>Two same-pitch tones</td></tr>
+          <tr><td><strong>OFF</strong></td><td>Two lowering tones</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="settings-file">Changing Settings via Settings File</h2>
+      <p>All settings are stored in a <code>settings.json</code> file on the device's USB storage. To edit it:</p>
+      <ol>
+        <li>Connect the powered-on T1000E card to your PC/Mac via USB.</li>
+        <li>If connecting for the first time, you will be prompted to format the drive. Format it.</li>
+        <li>After formatting, reconnect the device. A storage drive window will open.</li>
+        <li>Double-click the button to initialize the settings file. This writes a default <code>settings.json</code> and reboots the device.</li>
+        <li>Reconnect the device to your PC/Mac. Open the <code>settings.json</code> file in any text editor (e.g., Notepad).</li>
+        <li>Edit the values you want to change, save the file, then power-cycle the device to apply.</li>
+      </ol>
+
+      <p>Example <code>settings.json</code>:</p>
+<pre><code>{
+  "class": "SOFTRF",
+  "protocol": "FANET",
+  "altprotocol": "NONE",
+  "band": "EU",
+  "aircraft_type": "PARAGLIDER",
+  "aircraft_id": "88BB50",
+  "id_method": "DEVICE",
+  "alarm": "LATEST",
+  "alarm_filter": "NONE",
+  "txpower": "FULL",
+  "volume": "FULL",
+  "ignore_id": "000000",
+  "alarmlog": "YES",
+  "auto_sos": "NO",
+  "logflight": "AIRBORNE",
+  "loginterval": 4,
+  "igc_pilot": "Chuck Yeager",
+  "igc_type": "Ozone",
+  "igc_reg": "Delta4",
+  "fanet_name": "Chuck",
+  "debug_flags": "000000",
+  "sw_version": "SoftRF-MB177-VB008j-dev"
+}</code></pre>
+
+      <div class="info-box">
+        <strong>Applying Changes</strong>
+        After saving the file, power off the device by long-pressing the button, then power it back on to apply the new settings. The <code>sw_version</code> field is written by the firmware &mdash; do not change it manually.
+      </div>
+
+      <h3 id="settings-reference">All Settings Reference</h3>
+
+      <table>
+        <thead><tr><th>Field</th><th>Description</th><th>Options / Format</th></tr></thead>
+        <tbody>
+
+          <tr>
+            <td><code>class</code></td>
+            <td>File type identifier. Must always be present.</td>
+            <td><code>"SOFTRF"</code> (fixed)</td>
+          </tr>
+
+          <tr>
+            <td><code>protocol</code></td>
+            <td>Primary radio protocol used for transmitting and receiving traffic.</td>
+            <td>
+              <code>"LATEST"</code> &mdash; New FLARM V7 (2024+), recommended<br>
+              <code>"LEGACY"</code> &mdash; Old FLARM protocol<br>
+              <code>"FANET"</code> &mdash; Paraglider / hang-glider network (Skytraxx)<br>
+              <code>"ADS-L"</code> &mdash; e-conspicuity protocol<br>
+              <code>"OGNTP"</code> &mdash; OGN tracking network<br>
+              <code>"P3I"</code> &mdash; PilotAware
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>altprotocol</code></td>
+            <td>Secondary protocol transmitted every 4 seconds in addition to the primary. Useful for visibility across multiple networks.</td>
+            <td>
+              <code>"NONE"</code> &mdash; disabled (default)<br>
+              <code>"LATEST"</code>, <code>"LEGACY"</code>, <code>"ADS-L"</code>, <code>"OGNTP"</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>band</code></td>
+            <td>Regional radio frequency band. Must match the hardware variant and your country.</td>
+            <td>
+              <code>"EU"</code> &mdash; 868.2 MHz (Europe)<br>
+              <code>"US"</code> &mdash; 915 MHz (Americas)<br>
+              <code>"AU"</code> &mdash; 921 MHz (Australia)<br>
+              <code>"NZ"</code> &mdash; New Zealand<br>
+              <code>"CN"</code> &mdash; China<br>
+              <code>"UK"</code> &mdash; same as EU unless P3I<br>
+              <code>"IL"</code> &mdash; 916.2 MHz (Israel)
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>aircraft_type</code></td>
+            <td>Type of aircraft. Transmitted with every packet; used by FLARM collision algorithms and ground station displays.</td>
+            <td>
+              <code>"GLIDER"</code><br>
+              <code>"TOWPLANE"</code><br>
+              <code>"HELICOPTER"</code><br>
+              <code>"PARAGLIDER"</code><br>
+              <code>"HANGGLIDER"</code><br>
+              <code>"POWERED"</code><br>
+              <code>"JET"</code><br>
+              <code>"UFO"</code> &mdash; unknown / other<br>
+              <code>"BALLOON"</code><br>
+              <code>"ZEPPELIN"</code><br>
+              <code>"UAV"</code><br>
+              <code>"WINCH"</code> &mdash; ground-based winch launcher
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>aircraft_id</code></td>
+            <td>Your aircraft's 6-digit hexadecimal ID. Use your ICAO registration ID if you have one; otherwise the device generates its own. Register this ID in the OGN database so you appear on tracking maps.</td>
+            <td>6 hex digits, e.g. <code>"88BB50"</code>. Default <code>"000000"</code> means auto-assigned.</td>
+          </tr>
+
+          <tr>
+            <td><code>id_method</code></td>
+            <td>How your 6-digit ID is classified in transmitted packets.</td>
+            <td>
+              <code>"RANDOM"</code> &mdash; changes every few minutes<br>
+              <code>"ICAO"</code> &mdash; ICAO registration<br>
+              <code>"DEVICE"</code> &mdash; fixed device ID (starts with "8")<br>
+              <code>"ANONYMOUS"</code> &mdash; random but fixed for the flight<br>
+              <code>"OVERRIDE"</code> &mdash; transmits the entered ID marked as device ID
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>alarm</code></td>
+            <td>Collision alarm calculation method.</td>
+            <td>
+              <code>"NONE"</code> &mdash; no alarms<br>
+              <code>"DISTANCE"</code> &mdash; alarm based on proximity only<br>
+              <code>"VECTOR"</code> &mdash; alarm based on closing vector<br>
+              <code>"LATEST"</code> &mdash; full FLARM-style prediction including curved paths (recommended)
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>alarm_filter</code></td>
+            <td>Filter which aircraft types trigger collision alarms. Useful to suppress false alarms from dissimilar traffic.</td>
+            <td>
+              <code>"NONE"</code> &mdash; alarm on all traffic<br>
+              <code>"PG"</code> &mdash; paraglider/hangglider filter (only alarm on PG/HG traffic)
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>txpower</code></td>
+            <td>Transmit power level.</td>
+            <td>
+              <code>"FULL"</code> &mdash; up to 100 mW, normal operation<br>
+              <code>"LOW"</code> &mdash; ~2 mW, short-range testing<br>
+              <code>"OFF"</code> &mdash; receive only, no transmission
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>volume</code></td>
+            <td>Buzzer volume for collision alarms and status beeps.</td>
+            <td><code>"FULL"</code>, <code>"LOW"</code>, <code>"OFF"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>ignore_id</code></td>
+            <td>A specific aircraft ID to exclude from traffic reports and collision alarms (e.g., your regular towplane or flying partner).</td>
+            <td>6 hex digits. Default <code>"000000"</code> disables this feature.</td>
+          </tr>
+
+          <tr>
+            <td><code>alarmlog</code></td>
+            <td>Whether to record collision alarm events to a log file (<code>alarmlog.txt</code>) on the device storage. The log can be visualised in the <a href="alarm-viewer.html">Alarm Log Viewer</a>.</td>
+            <td><code>"YES"</code>, <code>"NO"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>auto_sos</code></td>
+            <td>Automatically broadcast an SOS/distress signal if the device detects a crash (sudden stop after airborne movement).</td>
+            <td><code>"YES"</code>, <code>"NO"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>logflight</code></td>
+            <td>IGC flight logging mode. Logs are stored on the device and can be downloaded via USB.</td>
+            <td>
+              <code>"OFF"</code> &mdash; no logging<br>
+              <code>"ALWAYS"</code> &mdash; log from power-on<br>
+              <code>"AIRBORNE"</code> &mdash; log only while detected airborne<br>
+              <code>"TRAFFIC"</code> &mdash; log when airborne and nearby traffic is detected
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>loginterval</code></td>
+            <td>Seconds between IGC log fixes. Lower values produce higher-resolution tracks but larger files.</td>
+            <td>Integer seconds, e.g. <code>1</code>, <code>2</code>, <code>4</code> (default), up to <code>155</code></td>
+          </tr>
+
+          <tr>
+            <td><code>igc_pilot</code></td>
+            <td>Pilot name written into IGC flight log headers. Required for log files to be accepted on Weglide, OLC, etc.</td>
+            <td>Free text string, e.g. <code>"Chuck Yeager"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>igc_type</code></td>
+            <td>Aircraft/glider model name written into IGC log headers.</td>
+            <td>Free text string, e.g. <code>"Ozone Enzo 3"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>igc_reg</code></td>
+            <td>Aircraft registration or competition number written into IGC log headers.</td>
+            <td>Free text string, e.g. <code>"Delta4"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>fanet_name</code></td>
+            <td>Short name broadcast with FANET packets. Appears as a label on FANET-capable displays and tracking maps.</td>
+            <td>Short string up to ~10 characters, e.g. <code>"Chuck"</code></td>
+          </tr>
+
+          <tr>
+            <td><code>debug_flags</code></td>
+            <td>Hexadecimal bitmask enabling internal debug and special operating modes. Leave as <code>"000000"</code> for normal use. See <a href="under-the-hood.html">Under the Hood</a> for advanced usage.</td>
+            <td>6 hex digits, e.g. <code>"000000"</code> (default). Example: <code>"800000"</code> enables simulator mode.</td>
+          </tr>
+
+          <tr>
+            <td><code>sw_version</code></td>
+            <td>Firmware version string, written automatically by the firmware on first boot. Used to detect version changes and migrate settings.</td>
+            <td>Do not edit manually.</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <h2 id="collision-alarms">Collision Alarms</h2>
+      <p>SoftRF analyses the positions and trajectories of nearby aircraft and issues alarms at three urgency levels:</p>
+      <table>
+        <thead><tr><th>Level</th><th>Time to collision</th><th>Buzzer</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Level 1</strong> (Low)</td><td>&le; 19 seconds</td><td>1 beep</td></tr>
+          <tr><td><strong>Level 2</strong> (Medium)</td><td>&le; 13 seconds</td><td>2 faster beeps</td></tr>
+          <tr><td><strong>Level 3</strong> (Urgent)</td><td>&le; 9 seconds</td><td>5 quick beeps</td></tr>
+        </tbody>
+      </table>
+      <p>If multiple aircraft are a threat simultaneously, beeps are doubled (levels 1&ndash;2) or extended to 7 (level 3).</p>
+
+      <div class="info-box tip">
+        <strong>Ground Testing</strong>
+        SoftRF does not generate collision warnings while on the ground. It does give warnings for one minute after boot and first GNSS fix, to allow testing before a flight.
+      </div>
+
+      <h2 id="flight-logging">Flight Logging</h2>
+      <p>The T1000E Card logs IGC-format flight tracks to its internal flash storage. Logs are accessible by connecting the device to a PC/Mac via USB.</p>
+      <ul>
+        <li>Set <code>"logflight"</code> to <code>"AIRBORNE"</code> or <code>"ALWAYS"</code> in <code>settings.json</code> to enable logging.</li>
+        <li>Set <code>"loginterval"</code> to control the fix recording interval (e.g., <code>4</code> seconds).</li>
+        <li>Fill in <code>"igc_pilot"</code>, <code>"igc_type"</code>, and <code>"igc_reg"</code> so that logs are identified correctly on flight sharing sites.</li>
+      </ul>
+      <p>Flight logs are secured with G-records and accepted on Weglide and OLC, but are not IGC-certified.</p>
+      <p>Alarm events can be logged separately by setting <code>"alarmlog": "YES"</code>. The resulting <code>alarmlog.txt</code> can be visualised using the <a href="alarm-viewer.html">Alarm Log Viewer</a> tool.</p>
+
+      <h2 id="firmware-update">Updating Firmware</h2>
+      <ol>
+        <li>Download the latest <code>.uf2</code> firmware file from <a href="https://github.com/moshe-braner/SoftRF/tree/master/software/firmware/binaries/nRF52840/SoftRF/MassStorage">the binaries page</a>.</li>
+        <li>Connect the T1000E Card to your PC/Mac via USB while powered on.</li>
+        <li>Delete any large files on the drive to free space, then eject the drive (keep the cable connected).</li>
+        <li>Double-click the RESET button &mdash; a drive named <strong>NRF52BOOT</strong> appears.</li>
+        <li>Drag the <code>.uf2</code> file onto the NRF52BOOT drive.</li>
+        <li>Wait approximately 30 seconds for the transfer and automatic reboot.</li>
+        <li>The device will restart with the new firmware. Reconnect and verify settings are intact.</li>
+      </ol>
+
+      <h2 id="fanet">FANET Features</h2>
+      <p>When operating in FANET mode, the T1000E broadcasts position and status data over the FANET radio network &mdash; a low-power mesh used by paragliders, hang-gliders, and mountain sport pilots. Your position, name, and status are visible in real time on compatible apps and devices including <strong>Skytraxx</strong>, <strong>Oudie N</strong>, <strong>XC Guide</strong>, <strong>GXAircom</strong>, <strong>BurnAir Map</strong>, and <strong>Puretrack</strong>.</p>
+
+      <h3 id="fanet-tracking">Ground Tracking (2D) vs Flight Tracking (3D)</h3>
+      <p>The device automatically switches between two tracking modes depending on whether it detects movement consistent with flight:</p>
+      <table>
+        <thead><tr><th>Mode</th><th>When active</th><th>What is broadcast</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Flight Tracking (3D)</strong></td>
+            <td>Device is airborne &mdash; altitude and speed above threshold</td>
+            <td>Full 3D position: latitude, longitude, <em>and</em> altitude. Shown as a moving aircraft symbol on compatible maps.</td>
+          </tr>
+          <tr>
+            <td><strong>Ground Tracking (2D)</strong></td>
+            <td>Device is on the ground or stationary</td>
+            <td>2D position: latitude and longitude only, with a ground status flag. Shown as a ground symbol with a status label on compatible maps.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>The transition between modes is automatic. No pilot action is needed.</p>
+
+      <h3 id="fanet-ground-states">Ground Tracking States</h3>
+      <p>While in Ground Tracking (2D) mode the device broadcasts one of several status values that describe what the pilot is doing on the ground. These states are visible as labels or icons on <strong>Skytraxx</strong>, <strong>Oudie N</strong>, <strong>XC Guide</strong>, and <strong>BurnAir Map</strong>:</p>
+      <table>
+        <thead><tr><th>State</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Flying</strong></td><td>Airborne &mdash; shown in flight tracking mode</td></tr>
+          <tr><td><strong>Active</strong></td><td>On the ground, moving (walking to launch, packing up)</td></tr>
+          <tr><td><strong>Idle</strong></td><td>On the ground, stationary</td></tr>
+          <tr><td><strong>Finished</strong></td><td>Flight completed, pilot has landed and is done for the day</td></tr>
+          <tr><td><strong>Need a Ride</strong></td><td>Pilot is landed out and needs retrieval</td></tr>
+          <tr><td><strong>Need Technical Support</strong></td><td>Pilot has a technical issue (equipment problem, not an emergency)</td></tr>
+          <tr><td><strong>Distress</strong></td><td>Emergency &mdash; pilot needs urgent help. See <a href="#fanet-sos">SOS section</a> below.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="fanet-sos">SOS &mdash; Pilot in Distress</h3>
+      <p>The SOS feature broadcasts an emergency signal when a pilot needs urgent assistance after a crash or injury.</p>
+
+      <h4>Manual activation</h4>
+      <p><strong>Double-click</strong> the button while on the ground to toggle the SOS state on or off. When SOS is active:</p>
+      <ul>
+        <li>The device switches to <strong>Ground Tracking (2D)</strong> mode and broadcasts the <strong>Distress</strong> ground state.</li>
+        <li>A <strong>FANET message</strong> is broadcast over the radio network: <em>"SOS! Pilot in Distress"</em> together with the pilot's GPS coordinates, so nearby pilots and rescue teams can locate you.</li>
+        <li>The Distress status and coordinates appear on <strong>BurnAir Map</strong>, <strong>Skytraxx</strong>, <strong>Oudie N</strong>, and <strong>XC Guide</strong>.</li>
+      </ul>
+      <p>To <strong>cancel</strong> SOS, double-click the button again. The device returns to normal operation.</p>
+
+      <h4>Automatic activation (auto_sos)</h4>
+      <p>If <code>"auto_sos": "YES"</code> is set in <code>settings.json</code>, the device monitors for a crash event (sudden stop after airborne movement). If a potential crash is detected:</p>
+      <ol>
+        <li>The device starts beeping to alert the pilot that SOS will activate.</li>
+        <li>The pilot has <strong>3 minutes</strong> to double-click the button to confirm they are OK and cancel the countdown.</li>
+        <li>If no action is taken within 3 minutes, SOS activates automatically &mdash; broadcasting Distress status and the location message as described above.</li>
+      </ol>
+
+      <div class="info-box warning">
+        <strong>Test SOS carefully</strong>
+        Always cancel a test SOS activation immediately. Leaving a Distress broadcast active will alert other pilots and rescue services in the area.
+      </div>
+
+      <h3 id="fanet-name">FANET Name</h3>
+      <p>The <code>"fanet_name"</code> field in <code>settings.json</code> sets a short pilot name that is broadcast with every FANET packet. This name appears as a label next to your position dot on:</p>
+      <ul>
+        <li>Skytraxx device screens</li>
+        <li>Oudie N display</li>
+        <li>XC Guide app map</li>
+        <li>GXAircom app</li>
+        <li>BurnAir Map</li>
+        <li>Puretrack Map</li>
+      </ul>
+      <p>Keep it short (up to ~10 characters) so it fits cleanly on screen. Example: <code>"fanet_name": "Chuck"</code>.</p>
+
+      <h3 id="fanet-messages">FANET Messages</h3>
+      <p>The T1000E can send and receive short text messages over the FANET radio network. Messages travel directly between devices without any internet connection &mdash; useful in the mountains where cellular coverage is poor or absent.</p>
+      <p>Compatible devices and apps for FANET messaging:</p>
+      <ul>
+        <li><strong>T1000E</strong> (this device) &mdash; send/receive via the XC Guide app over BLE</li>
+        <li><strong>T-Echo</strong> (Moshe Braner's SoftRF build) &mdash; send/receive with e-paper display</li>
+        <li><strong>GXAircom</strong> app</li>
+        <li><strong>Skytraxx</strong> devices</li>
+        <li><strong>Oudie N</strong></li>
+        <li><strong>XC Guide</strong> app</li>
+      </ul>
+      <p>Messages are limited to approximately 60&ndash;80 characters. They are broadcast to all nearby FANET devices within radio range (typically 5&ndash;15 km in open terrain).</p>
+
+      <h3 id="fanet-weather">Weather Stations</h3>
+      <p>FANET weather stations (installed at launch sites and mountain passes) broadcast local conditions over the FANET network including wind speed, wind direction, temperature, and humidity. The T1000E receives these broadcasts automatically whenever it is in FANET mode.</p>
+      <p>Received weather data can be displayed on the map in <strong>XC Guide</strong>, showing wind arrows and station data at the station's location. No internet connection is required &mdash; the data is received directly from the station over the air.</p>
+      <p>Other apps may gain support for FANET weather display in future updates.</p>
+
+      <h2 id="app-matrix">Compatible App Matrix</h2>
+      <p>The table below shows which features are supported by each compatible app when connected to the T1000E via Bluetooth LE.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>XC Track</th>
+            <th>XC Guide</th>
+            <th>FlySkyHi</th>
+            <th>SeeYou</th>
+            <th>SkyView</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BLE Connection</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+          <tr>
+            <td>Battery Level</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+          <tr>
+            <td>FANET Name</td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+          <tr>
+            <td><code>$PFLAA</code> Traffic Alarms</td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+          <tr>
+            <td><code>$FNNBG</code> sentence <sup>*</sup></td>
+            <td class="check">&#10003;</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+          </tr>
+          <tr>
+            <td>Settings from App <sup>**</sup></td>
+            <td class="cross">&#10007;</td>
+            <td class="check">&#10003;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+            <td class="cross">&#10007;</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><sup>*</sup> <code>$FNNBG</code> is a FANET-enriched NMEA sentence that carries additional data not present in standard sentences: FANET weather station readings, pilot ground tracking state, and pilot name. Apps that support it can show weather overlays, ground state labels, and names directly on the map.</p>
+      <p><sup>**</sup> Supported apps can read and write selected T1000E settings (such as protocol, alarm mode, and FANET name) directly from within the app, without needing to edit <code>settings.json</code> manually.</p>
+
+      <h2 id="registration">Registering Your ID</h2>
+      <p>Use your aircraft ID from <code>settings.json</code> to register your aircraft with tracking databases so you appear on online maps:</p>
+      <ul>
+        <li><a href="https://ddb.glidernet.org/">OGN Device Database Registration</a></li>
+        <li><a href="https://puretrack.io/">Puretrack Registration</a></li>
+      </ul>
+
+    </div>
+  </main>
+</div>
+
+<a href="#" class="back-to-top" aria-label="Back to top">&uarr;</a>
+
+<footer class="site-footer">
+  <p>SoftRF-PG Documentation &mdash; Based on Moshe Braner's SoftRF (version MB174)</p>
+  <p><a href="https://github.com/slash-bit/SoftRF-PG">GitHub</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

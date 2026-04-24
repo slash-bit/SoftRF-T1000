@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under the Hood - SoftRF-PG Docs</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      SoftRF-PG Docs
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About SoftRF</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="t1000e.html">T1000E Card User Guide</a>
+      <a href="under-the-hood.html" class="active">Under the Hood</a>
+      <a href="configurator.html">Configurator</a>
+      <a href="alarm-viewer.html">Alarm Viewer</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-title">On this page</div>
+      <nav class="sidebar-nav">
+        <a href="#advanced-settings">Advanced Settings</a>
+        <a href="#id-method" class="indent">ID Method</a>
+        <a href="#tx-power" class="indent">TX Power</a>
+        <a href="#protocols-mixed" class="indent">Alt Protocol</a>
+        <a href="#nmea-output" class="indent">NMEA Output</a>
+        <a href="#flight-log-settings" class="indent">Flight Log</a>
+        <a href="#tbeam-settings">T-Beam Only Settings</a>
+        <a href="#techo-settings">T-Echo Only Settings</a>
+        <a href="#addons">Add-Ons</a>
+        <a href="#sd-adapter" class="indent">SD Card Adapter</a>
+        <a href="#gnss-module" class="indent">GNSS Module</a>
+        <a href="#adsb-module" class="indent">ADS-B Module</a>
+        <a href="#data-bridging">Data Bridging</a>
+        <a href="#tips-tricks">Tips and Tricks</a>
+        <a href="#protocol-choices">Protocol Choices</a>
+        <a href="#air-relay">Air Relay</a>
+        <a href="#test-mode">Test Mode</a>
+        <a href="#nmea-settings">Settings via NMEA</a>
+        <a href="#operation-details">Details of Operation</a>
+        <a href="#major-changes">Major Changes</a>
+        <a href="#known-issues">Known Issues</a>
+        <a href="#compiling">Compiling SoftRF</a>
+        <a href="#simulator">Flight Simulator</a>
+        <a href="#sim-enable" class="indent">Enabling</a>
+        <a href="#sim-files" class="indent">Simulation Files</a>
+        <a href="#sim-format-gnss" class="indent">simulate.txt Format</a>
+        <a href="#sim-format-target" class="indent">target.txt Format</a>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-card">
+
+      <h1>Under the Hood</h1>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Advanced settings, protocol details, and developer notes &mdash; By Moshe Braner, updated Jan 27, 2026 for version MB174</p>
+
+      <h2 id="advanced-settings">Advanced Settings</h2>
+
+      <h3 id="id-method">id_method &mdash; Address Type</h3>
+      <p>Declares the transmitted 6-hex-digit ID type:</p>
+      <table>
+        <thead><tr><th>Value</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>Random (changes every few minutes)</td></tr>
+          <tr><td>1</td><td>ICAO ID</td></tr>
+          <tr><td>2</td><td>Device ID (starts with "8")</td></tr>
+          <tr><td>3</td><td>Anonymous (random but fixed for flight)</td></tr>
+          <tr><td>7</td><td>Override (transmits entered ID, marked as device ID)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>ignore_id &mdash; Aircraft ID to Ignore</h3>
+      <p>Enter a 6-hex-digit ID to exclude from traffic reports and collision warnings. E.g., your towplane. Leave as <code>000000</code> to disable.</p>
+
+      <h3>follow_id &mdash; Aircraft ID to Follow</h3>
+      <p>Prioritize a specific aircraft in traffic reports, e.g., your flying buddy. Leave as <code>000000</code> to disable.</p>
+
+      <h3 id="tx-power">tx_power &mdash; Transmit Power</h3>
+      <table>
+        <thead><tr><th>Value</th><th>Power</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>Off (receive only)</td><td>Ground station, second device in same aircraft</td></tr>
+          <tr><td>1</td><td>2 mW (low)</td><td>Short-range testing</td></tr>
+          <tr><td>2</td><td>Full (&le;100 mW)</td><td>Normal operation (default)</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="protocols-mixed">altprotocol &mdash; Alternate Protocol</h3>
+      <p>Set to 1 (OGNTP), 6 (Legacy), 7 (Latest) or 8 (ADS-L) to transmit in an alternative protocol once every 4 seconds. Can mix Latest/ADS-L with FANET or P3I using time-slicing.</p>
+
+      <h3>flr_adsl &mdash; Dual Protocol Reception</h3>
+      <p>If set to 1, enables simultaneous Latest+ADS-L reception in compatible dual-protocol modes.</p>
+
+      <h3 id="nmea-output">NMEA Output Settings</h3>
+      <p>Output destinations (<code>nmea_out</code>, <code>nmea_out2</code>):</p>
+      <table>
+        <thead><tr><th>Code</th><th>Destination</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>Off</td></tr>
+          <tr><td>1</td><td>Main serial</td></tr>
+          <tr><td>2</td><td>UDP (WiFi)</td></tr>
+          <tr><td>3</td><td>TCP (WiFi)</td></tr>
+          <tr><td>4</td><td>USB</td></tr>
+          <tr><td>5</td><td>Bluetooth</td></tr>
+          <tr><td>6</td><td>Aux serial</td></tr>
+        </tbody>
+      </table>
+
+      <p>Sentence type bitfields (<code>nmea_g</code>, <code>nmea_s</code>, <code>nmea_t</code>, <code>nmea_e</code>):</p>
+      <ul>
+        <li><code>nmea_g</code>: 1=basic(GGA+RMC), 2=GSA, 4=GST, 8=GSV, F=all</li>
+        <li><code>nmea_s</code>: 1=PGRMZ, 2=LK8EX1, 3=both</li>
+        <li><code>nmea_t</code>: 1=PFLAU+PFLAA, 8=PFLAJ, 9=both</li>
+        <li><code>nmea_e</code>: 1=tunnel from connected devices, 2=generated (strobe, alarm)</li>
+      </ul>
+
+      <h3 id="flight-log-settings">Flight Logging Settings</h3>
+      <table>
+        <thead><tr><th>Setting</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>logflight</code></td><td>0=off, 1=always, 2=airborne, 3=airborne+traffic</td></tr>
+          <tr><td><code>loginterval</code></td><td>Seconds between fixes (1-155)</td></tr>
+          <tr><td><code>compflash</code></td><td>0=uncompressed, 1=compressed IGZ format</td></tr>
+          <tr><td><code>alarmlog</code></td><td>0=off, 1=log alarm events to alarmlog.txt</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Other Settings</h3>
+      <table>
+        <thead><tr><th>Setting</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>hrange</code></td><td>Horizontal reporting range (km)</td></tr>
+          <tr><td><code>vrange</code></td><td>Vertical reporting range (hundreds of meters)</td></tr>
+          <tr><td><code>relay</code></td><td>0=off, 1=landed-out, 2=all traffic, 3=relay-only</td></tr>
+          <tr><td><code>expire</code></td><td>Seconds to keep reporting lost traffic (1-30, default=5)</td></tr>
+          <tr><td><code>baud_rate</code></td><td>1=4800, 2=9600, 3=19200, 4=38400, 5=57600, 6=115200</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="tbeam-settings">T-Beam Only Settings</h2>
+      <table>
+        <thead><tr><th>Setting</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>altpin0</code></td><td>Serial input pin: 0=RX (default), 1=VP, or specify pin number</td></tr>
+          <tr><td><code>baudrate2</code></td><td>Aux serial baud rate (0=off, codes same as baud_rate)</td></tr>
+          <tr><td><code>invert2</code></td><td>Aux serial logic: normal or inverted (for RS232 without converter)</td></tr>
+          <tr><td><code>power_save</code></td><td>1=turn WiFi off after 10 min if no client</td></tr>
+          <tr><td><code>power_ext</code></td><td>1=auto shutdown when external power removed</td></tr>
+          <tr><td><code>rx1090</code></td><td>Activate GNS5892 ADS-B receiver module</td></tr>
+          <tr><td><code>mode_s</code></td><td>Mode S processing: 0=off, 1-9=sensitivity level</td></tr>
+          <tr><td><code>strobe</code></td><td>0=off, 1=alarm only, 2=airborne, 3=always</td></tr>
+          <tr><td><code>voice</code></td><td>0=off, 1=internal DAC (pin 25), 2=external I2S</td></tr>
+          <tr><td><code>gnss_pins</code></td><td>0=internal, 1=VN/4, 2=13/2, 3=15/14</td></tr>
+          <tr><td><code>sd_card</code></td><td>0=none, 1=pins 13/25/2/0, 2=pins 13/VP/2/0, 3=LORA SPI pins</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="techo-settings">T-Echo Only Settings</h2>
+      <table>
+        <thead><tr><th>Setting</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>epd_units</code></td><td>0=metric, 1=imperial, 2=mixed</td></tr>
+          <tr><td><code>epd_zoom</code></td><td>Default zoom level</td></tr>
+          <tr><td><code>epd_rotate</code></td><td>Display direction</td></tr>
+          <tr><td><code>epd_orient</code></td><td>Track up or North up</td></tr>
+          <tr><td><code>epd_vmode</code></td><td>Default view: 0=status, 1=radar, 2=text</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="addons">Add-Ons</h2>
+
+      <h3 id="sd-adapter">Adding an SD Card Adapter</h3>
+      <p>SD adapters connect via SPI, requiring 4 GPIO pins. Pin choices:</p>
+      <ul>
+        <li><code>sd_card=1</code>: SCK=13, MISO=25, MOSI=2, CS=0</li>
+        <li><code>sd_card=2</code>: SCK=13, MISO=VP, MOSI=2, CS=0</li>
+        <li><code>sd_card=3</code>: LORA SPI pins (5,19,27) + CS=0 &mdash; shared with radio module</li>
+      </ul>
+      <p>Unbuffered adapters are smaller and easier. If using pin 0 for CS, add a diode (cathode toward pin 0) or 3.3K resistor to prevent boot issues.</p>
+
+      <h3 id="gnss-module">Adding an External GNSS Module</h3>
+      <p>Connect an external TTL-serial GNSS module (ideally Ublox-compatible with PPS output) using the <code>gnss_pins</code> setting. Three pin choices available, each precluding other functionality.</p>
+
+      <h3 id="adsb-module">Adding an ADS-B Receiver</h3>
+      <p>The GNS5892R module connects via the auxiliary serial port at 921600 baud. See <a href="https://github.com/moshe-braner/SoftRF/blob/master/software/firmware/documentation/GNS5892_wiring.jpg">wiring diagram</a>. Only ES1090 data frames 17 and 18 are processed.</p>
+
+      <h2 id="data-bridging">Data Bridging</h2>
+      <p>NMEA sentences from external devices are forwarded to output destinations (with "external" sentences enabled). Sentences are not echoed back to their source port. GNSS and FLARM sentences from external sources are not forwarded.</p>
+      <p>The secondary serial port uses pins RX=39 ("VN") and TX=4. The "invert" option allows direct RS232 connection without a MAX232 converter (TTL voltage levels only).</p>
+
+      <h2 id="tips-tricks">Tips and Tricks</h2>
+      <p>See the <a href="user-guide.html">User Guide</a> for day-to-day tips. Advanced tips include reception range analysis, RSSI monitoring, and GNSS bridge mode &mdash; all detailed in the full text document.</p>
+
+      <h2 id="protocol-choices">Protocol Choices</h2>
+      <h3>Single Protocols</h3>
+      <ul>
+        <li><strong>Latest</strong> &mdash; compatible with new FLARM (2024+), recommended</li>
+        <li><strong>Legacy</strong> &mdash; old FLARM, not recommended</li>
+        <li><strong>ADS-L</strong> &mdash; e-conspicuity</li>
+        <li><strong>OGNTP</strong> &mdash; OGN tracking</li>
+        <li><strong>FANET</strong> &mdash; paraglider network</li>
+        <li><strong>P3I</strong> &mdash; PilotAware</li>
+      </ul>
+
+      <h3>Mixed Protocols (examples)</h3>
+      <table>
+        <thead><tr><th>Combination</th><th>Behavior</th></tr></thead>
+        <tbody>
+          <tr><td>Latest + ADS-L</td><td>TX/RX Latest, TX ADSL every 4s in slot 0</td></tr>
+          <tr><td>Latest + OGNTP</td><td>TX/RX Latest, TX OGNTP every 4s</td></tr>
+          <tr><td>Latest + FANET</td><td>Time-sliced: slot 0 = Latest, slot 1 = FANET</td></tr>
+          <tr><td>Latest + P3I</td><td>Time-sliced: slot 0 = Latest, slot 1 = P3I</td></tr>
+          <tr><td>FANET + ADS-L</td><td>Time-sliced: slot 0 = ADS-L, slot 1 = FANET</td></tr>
+        </tbody>
+      </table>
+      <p>With <code>flr_adsl=1</code>, slot 0 uses simultaneous FLR+ADSL dual reception in most modes.</p>
+
+      <h2 id="air-relay">Air Relay</h2>
+      <table>
+        <thead><tr><th>Setting</th><th>Mode</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>Off</td><td>No relaying</td></tr>
+          <tr><td>1</td><td>Landed</td><td>Relay landed-out gliders (opt-in)</td></tr>
+          <tr><td>2</td><td>All</td><td>Also relay ADS-B or FLARM traffic in ADS-L</td></tr>
+          <tr><td>3</td><td>Relay only</td><td>Relay ADS-B at lower power, no self-transmission</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="test-mode">Test Mode</h2>
+      <p>Toggle with: double-click middle button (T-Beam), URL <code>.../testmode</code>, or NMEA command <code>$PSRFT</code>. In test mode, relay works on the ground and ADS-L transmits every second.</p>
+
+      <h2 id="nmea-settings">Settings via NMEA</h2>
+      <p>Settings can be changed via NMEA commands through USB or Bluetooth terminal:</p>
+      <ul>
+        <li><code>$PSRFS,?*57</code> &mdash; list all settings</li>
+        <li><code>$PSRFS,0,label,?</code> &mdash; query one setting</li>
+        <li><code>$PSRFS,0,label,value</code> &mdash; change one setting</li>
+        <li><code>$PSRFC,SAV*3C</code> &mdash; save and reboot</li>
+      </ul>
+
+      <h2 id="operation-details">Details of Operation</h2>
+      <p>SoftRF is embedded software running in real time. The main loop order:</p>
+      <ol>
+        <li><code>Baro_loop()</code> &mdash; compute vertical speed if sensor available</li>
+        <li><code>GNSS_loop()</code> &mdash; get new GPS fix</li>
+        <li>Compute timestamps, discretize fixes into ~2s intervals</li>
+        <li><code>Estimate_Wind()</code> &mdash; wind estimation and path projection</li>
+        <li><code>RF_Transmit()</code> &mdash; encode and transmit at preset intervals</li>
+        <li><code>RF_Receive()</code> &mdash; check for received data</li>
+        <li><code>ParseData()</code> &mdash; decode received packets, update traffic</li>
+        <li><code>Traffic_loop()</code> &mdash; collision checking at 2s intervals</li>
+        <li><code>Sound_loop()</code> &mdash; process audio</li>
+        <li><code>NMEA_Export()</code> &mdash; output data</li>
+      </ol>
+
+      <h2 id="major-changes">Major Changes in This Version</h2>
+      <p>Key changes from mainline SoftRF:</p>
+      <ul>
+        <li><strong>Wind estimation</strong> &mdash; new Wind.cpp module estimates wind from circling drift and speed variation</li>
+        <li><strong>"Latest" collision prediction</strong> &mdash; predicts curved paths for circling aircraft, accounting for wind</li>
+        <li><strong>ApproxMath</strong> &mdash; fast trig functions optimized for collision calculations</li>
+        <li><strong>Audio alarms</strong> &mdash; 3-level buzzer and voice warnings</li>
+        <li><strong>Improved FLARM compatibility</strong> &mdash; correct time slots, frequency hopping, path projections</li>
+        <li><strong>Vertical separation</strong> &mdash; taken into account in alarm calculations</li>
+        <li><strong>Hysteresis</strong> &mdash; prevents alarm oscillation at threshold boundaries</li>
+        <li><strong>GNS5892 ADS-B</strong> &mdash; integrated receiver support with Mode-S RSSI calibration</li>
+        <li><strong>Data bridging</strong> &mdash; multi-port NMEA forwarding</li>
+        <li><strong>Settings file</strong> &mdash; text-based settings.txt replaces binary EEPROM</li>
+        <li><strong>Dual-protocol reception</strong> &mdash; simultaneous FLARM + ADS-L</li>
+      </ul>
+
+      <h2 id="known-issues">Known Issues</h2>
+      <ul>
+        <li>Packets-transmitted count on OLED sometimes increments by dozens at once</li>
+        <li>T-Echo occasionally reports "RF loopback" &mdash; harmless</li>
+        <li>Reception may improve with ~50ms clock shift (reason unclear)</li>
+      </ul>
+
+      <h2 id="compiling">Compiling SoftRF</h2>
+      <ul>
+        <li>Platform: Ubuntu 20.04, Arduino IDE 1.8.16</li>
+        <li>T-Beam: ESP32 board support v2.0.3, 160 MHz CPU, 80 MHz DIO flash, Minimal SPIFFS, PSRAM enabled</li>
+        <li>T-Echo: Adafruit nRF52 board support v1.2.0</li>
+      </ul>
+
+      <h2 id="simulator">Flight Simulator Mode</h2>
+      <p>Simulator mode lets you replay a recorded flight on the device without needing GPS reception or real radio traffic. The device reads your own-ship position from a file, and optionally reads nearby traffic from a second file, then runs the full collision-alarm pipeline — buzzer, voice, NMEA output — exactly as it would in the air. This is useful for:</p>
+      <ul>
+        <li>Testing alarm thresholds and buzzer/voice response on the ground</li>
+        <li>Verifying a new firmware build behaves correctly</li>
+        <li>Demonstrating SoftRF to new users with realistic traffic scenarios</li>
+        <li>Debugging alarm logic with a known, repeatable scenario</li>
+      </ul>
+
+      <div class="info-box warning">
+        <strong>Radio disabled in simulator mode</strong>
+        The device does <em>not</em> transmit RF packets and does not relay traffic while the simulator flag is active. It also disables the ADS-B receiver input. The radio hardware stays quiet.
+      </div>
+
+      <h3 id="sim-enable">Enabling Simulator Mode</h3>
+      <p>Simulator mode is activated by setting bit <code>0x800000</code> in <code>debug_flags</code>. Add or update this line in <code>settings.txt</code>:</p>
+      <pre><code>debug_flags,800000</code></pre>
+      <p>If you have other debug flags set, OR the values together (e.g., <code>debug_flags,800017</code>). The web interface status page shows <strong>"Warning: simulation mode (debug_flag 800000)"</strong> when the flag is active. The OLED display shows <strong>SIM</strong> in the top-right corner.</p>
+      <p>The simulator starts replaying the file approximately 40 seconds after boot, giving the system time to initialise. It will then advance one simulated second at a time, paced by the device clock.</p>
+      <p>To return to normal operation, remove the flag (set <code>debug_flags,000000</code> or delete the line) and reboot.</p>
+
+      <h3 id="sim-files">Simulation Files</h3>
+      <p>Two plain-text files drive the simulator. Both go in the <code>logs/</code> folder of the storage medium:</p>
+      <table>
+        <thead><tr><th>File</th><th>Location</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>simulate.txt</code></td>
+            <td><code>logs/simulate.txt</code></td>
+            <td>Own-ship position — standard NMEA GGA/RMC sentences for each second of the flight</td>
+          </tr>
+          <tr>
+            <td><code>target.txt</code></td>
+            <td><code>logs/target.txt</code></td>
+            <td>Nearby traffic — one <code>$PFSIM</code> sentence per target per second (optional)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>On hardware with an SD card (T-Beam with SD adapter), the files are read from the SD card. On hardware with an internal flash filesystem (T-Echo / T1000E Card), they are read from the internal <code>/logs/</code> folder, accessible over USB.</p>
+      <p>If <code>simulate.txt</code> is absent or empty, the simulator still runs but uses the live GNSS receiver or serial input for own-ship position. If <code>target.txt</code> is absent, no simulated traffic is injected.</p>
+
+      <h3 id="sim-format-gnss">simulate.txt &mdash; Own-Ship Position File</h3>
+      <p>The file contains standard NMEA sentences, one per line, exactly as a GPS receiver would output them. At minimum, each simulated second needs a <code>$GPGGA</code> (or <code>$GNGGA</code>) and a <code>$GPRMC</code> (or <code>$GNRMC</code>) sentence with the same timestamp.</p>
+
+      <h4>Timing control</h4>
+      <p>The simulator advances one second each time it sees a separator between bursts of sentences. A separator is:</p>
+      <ul>
+        <li>A line starting with <code>.</code> (dot) &mdash; causes a one-second pause. Use <code>..</code> for two seconds, <code>...</code> for three, etc.</li>
+        <li>A blank line &mdash; same effect as a single dot.</li>
+        <li>Two consecutive blank lines &mdash; two-second pause (each extra blank adds another second).</li>
+      </ul>
+
+      <h4>Example simulate.txt</h4>
+      <pre><code>$GPGGA,102301.00,4712.34567,N,00823.45678,E,1,08,1.0,650.0,M,47.0,M,,*XX
+$GPRMC,102301.00,A,4712.34567,N,00823.45678,E,45.0,270.0,130125,,,A*XX
+.
+$GPGGA,102302.00,4712.33000,N,00823.46000,E,1,08,1.0,651.0,M,47.0,M,,*XX
+$GPRMC,102302.00,A,4712.33000,N,00823.46000,E,45.0,270.0,130125,,,A*XX
+.
+</code></pre>
+      <div class="info-box">
+        <strong>Tip: use your own IGC flight logs</strong>
+        You can convert an existing IGC flight log into NMEA sentences using tools such as <a href="https://xcsoar.org/">XCSoar's</a> IGC-to-NMEA converter or any GPX/IGC converter. This gives you a realistic own-ship trajectory to test against.
+      </div>
+
+      <h3 id="sim-format-target">target.txt &mdash; Traffic File</h3>
+      <p>Each line is a proprietary NMEA sentence in the format <code>$PFSIM</code> that describes one traffic aircraft at one moment in time. The simulator injects each sentence as traffic data at the matching UTC time.</p>
+
+      <h4>$PFSIM sentence format</h4>
+      <pre><code>$PFSIM,HHMMSS,ADDR,ADDRTYPE,ACTYPE,LAT,LON,ALT,SPEED,COURSE,VS,TURNRATE*CS</code></pre>
+      <table>
+        <thead><tr><th>Field</th><th>Unit / Format</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>HHMMSS</code></td><td>UTC hhmmss</td><td>Time this target position should be injected (must match the own-ship time)</td></tr>
+          <tr><td><code>ADDR</code></td><td>6-digit hex</td><td>FLARM/ICAO address of the traffic aircraft (e.g. <code>3D1234</code>)</td></tr>
+          <tr><td><code>ADDRTYPE</code></td><td>integer</td><td>Address type: 0 = ICAO, 1 = FLARM, 2 = OGN, 3 = random</td></tr>
+          <tr><td><code>ACTYPE</code></td><td>integer</td><td>Aircraft type: 1 = glider, 2 = towplane, 7 = paraglider, 8 = powered, etc.</td></tr>
+          <tr><td><code>LAT</code></td><td>decimal degrees</td><td>Latitude (positive = North)</td></tr>
+          <tr><td><code>LON</code></td><td>decimal degrees</td><td>Longitude (positive = East)</td></tr>
+          <tr><td><code>ALT</code></td><td>metres (MSL)</td><td>Altitude above mean sea level</td></tr>
+          <tr><td><code>SPEED</code></td><td>m/s</td><td>Ground speed</td></tr>
+          <tr><td><code>COURSE</code></td><td>degrees true</td><td>Track over ground (0&ndash;360)</td></tr>
+          <tr><td><code>VS</code></td><td>m/s</td><td>Vertical speed (positive = climbing)</td></tr>
+          <tr><td><code>TURNRATE</code></td><td>deg/s</td><td>Turn rate (positive = right turn, negative = left turn, 0 = straight)</td></tr>
+        </tbody>
+      </table>
+      <p>The checksum <code>*CS</code> at the end is validated by the parser. You must compute a correct NMEA checksum (XOR of all bytes between <code>$</code> and <code>*</code>). Many NMEA utilities and text editors with NMEA plugins can compute this for you.</p>
+      <p>Each <code>$PFSIM</code> sentence describes a <em>single aircraft at a single point in time</em>. To simulate continuous traffic, add one sentence per target per second, matching the timestamps in <code>simulate.txt</code>.</p>
+
+      <h4>Example target.txt</h4>
+      <pre><code># Glider approaching head-on, 200 m above, closing at ~80 km/h combined
+$PFSIM,102301,3D1234,1,1,47.2200,8.3950,850,22.0,90.0,0.0,0.0*XX
+$PFSIM,102302,3D1234,1,1,47.2200,8.3920,850,22.0,90.0,0.0,0.0*XX
+$PFSIM,102303,3D1234,1,1,47.2200,8.3890,850,22.0,90.0,0.0,0.0*XX
+</code></pre>
+      <div class="info-box">
+        <strong>Timing must match</strong>
+        A <code>$PFSIM</code> sentence is only injected when the own-ship simulator clock (from <code>simulate.txt</code>) reaches the same UTC second. Sentences with timestamps in the past are discarded. Make sure own-ship and traffic timestamps are aligned.
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<a href="#" class="back-to-top" aria-label="Back to top">&uarr;</a>
+
+<footer class="site-footer">
+  <p>SoftRF-PG Documentation &mdash; Based on Moshe Braner's SoftRF (version MB174)</p>
+  <p><a href="https://github.com/slash-bit/SoftRF-PG">GitHub</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
