@@ -67,7 +67,7 @@
     <div class="content-card">
 
       <h1>Under the Hood</h1>
-      <p style="color: var(--text-secondary); margin-bottom: 24px;">Advanced settings, protocol details, and developer notes &mdash; By Moshe Braner, updated Jan 27, 2026 for version MB174</p>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Advanced settings, protocol details. &mdash; updated May 06, 2026 for version VB008</p>
 
       <h2 id="advanced-settings">Advanced Settings</h2>
 
@@ -152,23 +152,6 @@
         </tbody>
       </table>
 
-      <h2 id="tbeam-settings">T-Beam Only Settings</h2>
-      <table>
-        <thead><tr><th>Setting</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>altpin0</code></td><td>Serial input pin: 0=RX (default), 1=VP, or specify pin number</td></tr>
-          <tr><td><code>baudrate2</code></td><td>Aux serial baud rate (0=off, codes same as baud_rate)</td></tr>
-          <tr><td><code>invert2</code></td><td>Aux serial logic: normal or inverted (for RS232 without converter)</td></tr>
-          <tr><td><code>power_save</code></td><td>1=turn WiFi off after 10 min if no client</td></tr>
-          <tr><td><code>power_ext</code></td><td>1=auto shutdown when external power removed</td></tr>
-          <tr><td><code>rx1090</code></td><td>Activate GNS5892 ADS-B receiver module</td></tr>
-          <tr><td><code>mode_s</code></td><td>Mode S processing: 0=off, 1-9=sensitivity level</td></tr>
-          <tr><td><code>strobe</code></td><td>0=off, 1=alarm only, 2=airborne, 3=always</td></tr>
-          <tr><td><code>voice</code></td><td>0=off, 1=internal DAC (pin 25), 2=external I2S</td></tr>
-          <tr><td><code>gnss_pins</code></td><td>0=internal, 1=VN/4, 2=13/2, 3=15/14</td></tr>
-          <tr><td><code>sd_card</code></td><td>0=none, 1=pins 13/25/2/0, 2=pins 13/VP/2/0, 3=LORA SPI pins</td></tr>
-        </tbody>
-      </table>
 
       <h2 id="techo-settings">T-Echo Only Settings</h2>
       <table>
@@ -182,29 +165,6 @@
         </tbody>
       </table>
 
-      <h2 id="addons">Add-Ons</h2>
-
-      <h3 id="sd-adapter">Adding an SD Card Adapter</h3>
-      <p>SD adapters connect via SPI, requiring 4 GPIO pins. Pin choices:</p>
-      <ul>
-        <li><code>sd_card=1</code>: SCK=13, MISO=25, MOSI=2, CS=0</li>
-        <li><code>sd_card=2</code>: SCK=13, MISO=VP, MOSI=2, CS=0</li>
-        <li><code>sd_card=3</code>: LORA SPI pins (5,19,27) + CS=0 &mdash; shared with radio module</li>
-      </ul>
-      <p>Unbuffered adapters are smaller and easier. If using pin 0 for CS, add a diode (cathode toward pin 0) or 3.3K resistor to prevent boot issues.</p>
-
-      <h3 id="gnss-module">Adding an External GNSS Module</h3>
-      <p>Connect an external TTL-serial GNSS module (ideally Ublox-compatible with PPS output) using the <code>gnss_pins</code> setting. Three pin choices available, each precluding other functionality.</p>
-
-      <h3 id="adsb-module">Adding an ADS-B Receiver</h3>
-      <p>The GNS5892R module connects via the auxiliary serial port at 921600 baud. See <a href="https://github.com/moshe-braner/SoftRF/blob/master/software/firmware/documentation/GNS5892_wiring.jpg">wiring diagram</a>. Only ES1090 data frames 17 and 18 are processed.</p>
-
-      <h2 id="data-bridging">Data Bridging</h2>
-      <p>NMEA sentences from external devices are forwarded to output destinations (with "external" sentences enabled). Sentences are not echoed back to their source port. GNSS and FLARM sentences from external sources are not forwarded.</p>
-      <p>The secondary serial port uses pins RX=39 ("VN") and TX=4. The "invert" option allows direct RS232 connection without a MAX232 converter (TTL voltage levels only).</p>
-
-      <h2 id="tips-tricks">Tips and Tricks</h2>
-      <p>See the <a href="user-guide.html">User Guide</a> for day-to-day tips. Advanced tips include reception range analysis, RSSI monitoring, and GNSS bridge mode &mdash; all detailed in the full text document.</p>
 
       <h2 id="protocol-choices">Protocol Choices</h2>
       <h3>Single Protocols</h3>
@@ -229,20 +189,6 @@
         </tbody>
       </table>
       <p>With <code>flr_adsl=1</code>, slot 0 uses simultaneous FLR+ADSL dual reception in most modes.</p>
-
-      <h2 id="air-relay">Air Relay</h2>
-      <table>
-        <thead><tr><th>Setting</th><th>Mode</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>0</td><td>Off</td><td>No relaying</td></tr>
-          <tr><td>1</td><td>Landed</td><td>Relay landed-out gliders (opt-in)</td></tr>
-          <tr><td>2</td><td>All</td><td>Also relay ADS-B or FLARM traffic in ADS-L</td></tr>
-          <tr><td>3</td><td>Relay only</td><td>Relay ADS-B at lower power, no self-transmission</td></tr>
-        </tbody>
-      </table>
-
-      <h2 id="test-mode">Test Mode</h2>
-      <p>Toggle with: double-click middle button (T-Beam), URL <code>.../testmode</code>, or NMEA command <code>$PSRFT</code>. In test mode, relay works on the ground and ADS-L transmits every second.</p>
 
       <h2 id="nmea-settings">Settings via NMEA</h2>
       <p>Settings can be changed via NMEA commands through USB or Bluetooth terminal:</p>
@@ -278,24 +224,14 @@
         <li><strong>Improved FLARM compatibility</strong> &mdash; correct time slots, frequency hopping, path projections</li>
         <li><strong>Vertical separation</strong> &mdash; taken into account in alarm calculations</li>
         <li><strong>Hysteresis</strong> &mdash; prevents alarm oscillation at threshold boundaries</li>
-        <li><strong>GNS5892 ADS-B</strong> &mdash; integrated receiver support with Mode-S RSSI calibration</li>
-        <li><strong>Data bridging</strong> &mdash; multi-port NMEA forwarding</li>
         <li><strong>Settings file</strong> &mdash; text-based settings.txt replaces binary EEPROM</li>
-        <li><strong>Dual-protocol reception</strong> &mdash; simultaneous FLARM + ADS-L</li>
+        <li><strong>Dual-protocol</strong> &mdash; simultaneous FLARM + FANET operation</li>
       </ul>
 
       <h2 id="known-issues">Known Issues</h2>
       <ul>
-        <li>Packets-transmitted count on OLED sometimes increments by dozens at once</li>
-        <li>T-Echo occasionally reports "RF loopback" &mdash; harmless</li>
-        <li>Reception may improve with ~50ms clock shift (reason unclear)</li>
-      </ul>
+        <li>Dual mode FLARM/ADS-L not operational</li>
 
-      <h2 id="compiling">Compiling SoftRF</h2>
-      <ul>
-        <li>Platform: Ubuntu 20.04, Arduino IDE 1.8.16</li>
-        <li>T-Beam: ESP32 board support v2.0.3, 160 MHz CPU, 80 MHz DIO flash, Minimal SPIFFS, PSRAM enabled</li>
-        <li>T-Echo: Adafruit nRF52 board support v1.2.0</li>
       </ul>
 
       <h2 id="simulator">Flight Simulator Mode</h2>
