@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About SoftRF - SoftRF-PG Docs</title>
+<title>About SoftRF PG- SoftRF-PG Docs</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
     <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
     <nav class="top-nav">
       <a href="index.html">Home</a>
-      <a href="about.html" class="active">About SoftRF</a>
+      <a href="about.html" class="active">About SoftRF PG</a>
       <a href="getting-started.html">Getting Started</a>
       <a href="t1000e.html">T1000E Card User Guide</a>
       <a href="under-the-hood.html">Under the Hood</a>
@@ -46,12 +46,12 @@
     <div class="content-card">
 
       <h1>About SoftRF</h1>
-      <p style="color: var(--text-secondary); margin-bottom: 24px;">By Moshe Braner &mdash; Updated Jan 27, 2026 for version MB174</p>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Updated May 06, 2026 for version VB008</p>
 
       <h2 id="what-is-softrf">What is SoftRF</h2>
-      <p>SoftRF is a do-it-yourself, multifunctional, compatible, radio-based proximity awareness system for general aviation. SoftRF is free, open-source software that runs on inexpensive off-the-shelf hardware. This software, when installed on suitable hardware and carried in an aircraft, transmits data on its position, and receives position data from other aircraft with compatible systems.</p>
+      <p>SoftRF is a do-it-yourself, multifunctional, compatible, radio-based proximity awareness system for general aviation. SoftRF is free, open-source software that runs on inexpensive off-the-shelf hardware. This software, when installed on suitable hardware (SenseCap T1000E) and carried in an aircraft, transmits data on its position, and receives position data from other aircraft with compatible systems.</p>
 
-      <p>Using SoftRF in your aircraft (when configured to use the "Latest" protocol) will:</p>
+      <p>Using SoftRF in your aircraft (when configured to use the "Latest" (FLARM) protocol) will:</p>
       <ul>
         <li>Make you visible to other FLARMs</li>
         <li>Make you visible to OGN ground stations, viewable on sites like <a href="https://puretrack.io/">puretrack.io</a> or <a href="https://glidertracker.org/">glidertracker.org</a></li>
@@ -59,19 +59,19 @@
         <li>Generate collision warnings, alone or in conjunction with other devices</li>
       </ul>
 
-      <h3>What can SoftRF do that FLARM cannot?</h3>
-      <p>On appropriate hardware, SoftRF can send traffic and position data via WiFi or Bluetooth, which older FLARM models cannot do without additional hardware. SoftRF can also operate using radio protocols other than the one used by FLARM, such as OGNTP, ADS-L, P3I or FANET. SoftRF can run all day on a small internal battery.</p>
+      <h3>What this can SoftRF PG do that FLARM cannot?</h3>
+      <p>On T1000E, SoftRF can send traffic and position data via Bluetooth, to Compatible Apps* which older FLARM models cannot do without additional hardware. SoftRF can also operate using radio protocols other than the one used by FLARM, such as OGNTP, ADS-L, P3I or FANET. SoftRF can run all day on a small internal battery.</p>
 
       <h3>What can this version do that mainline SoftRF cannot?</h3>
       <ul>
         <li>Receive and transmit in the new FLARM protocol (V7) from March 2024</li>
-        <li>Fixes radio protocol bugs for more reliable FLARM interoperability</li>
+        <li>Correctly transmits FANET full suite of messages</li>
         <li>Correctly transmits curved flight path for collision prediction in thermals</li>
         <li>Interprets curved paths from FLARM units, with wind drift compensation</li>
         <li>Built-in audible collision warnings in 3 urgency levels</li>
         <li>Assign aircraft IDs, specify IDs to ignore or follow</li>
         <li>Record IGC flight log files</li>
-        <li>Transmit in an alternate protocol (OGNTP or ADS-L) every 4 seconds</li>
+        <li>Transmit in an alternate protocol (FANET) every 4 seconds</li>
         <li>Receive ADS-L signals simultaneously with FLARM signals</li>
         <li>Operate on two or three protocols simultaneously</li>
         <li>Relay selected traffic for increased range</li>
@@ -80,29 +80,34 @@
       <h2 id="history">History</h2>
       <p>FLARM, the traffic awareness and collision avoidance system adopted by most glider pilots in Europe, operates in the 866-928 MHz range. It transmits in low power (25 milliwatts), in short bursts of a few milliseconds, once or twice per second.</p>
       <p>Linar Yusupov (<a href="https://github.com/lyusupov/SoftRF">github.com/lyusupov/SoftRF</a>) developed SoftRF, which sends, receives and interprets signals compatible with FLARM. Moshe Braner (<a href="https://github.com/moshe-braner/SoftRF">github.com/moshe-braner/SoftRF</a>) further developed SoftRF, making it a more complete functional equivalent to FLARM.</p>
+      <p></p>Vlad Belayev (<a href="https://github.com/slash-bit/SoftRF-T1000">github.com/slash-bit/SoftRF-T1000E</a>) adobted SoftRF for SenseCapT -T1000E device, further improved functionality by adding FANET full protocol suite, making suitable for paragliding.</p>
 
       <h2 id="hardware">Hardware Choices</h2>
       <p>This version of SoftRF runs on certain devices with "system on a chip" CPU:</p>
       <ul>
-        <li><strong>T-Beam</strong> (LilyGo/TTGO) &mdash; "Prime Mark II" edition. ESP32-based with WiFi, Bluetooth, GNSS, ISM-band radio, battery holder, and PSRAM. <em>Only the plain T-Beam is supported, not the T-Beam Supreme.</em></li>
-        <li><strong>T-Echo</strong> &mdash; "Badge" edition. nRF52840-based with e-paper display and BLE.</li>
+        <li><strong>Seeed SenseCap "T1000-E"</strong> &mdash; "Card" edition. nRF52840-based Lr1110 radio with GNSS and BLE, plus 8MB Flash.</li>
+        <li><strong>LilyGo "T-Echo"</strong> &mdash; "Badge" edition. nRF52840-based with e-paper display and BLE.</li>
+        <li><strong>Elecrow M3</strong> (ThinkNode) &mdash; LR1100 Radio, Bluetooth, GNSS <em>no SPI Flash (only EEPROM)</em></li>
       </ul>
+
+      <div style="display: flex; gap: 32px; flex-wrap: wrap; margin: 24px 0; align-items: flex-start;">
+        <figure style="margin: 0; text-align: center;">
+          <img src="images/T1000-E.png" alt="Seeed SenseCap T1000-E" style="max-width: 280px; width: 100%; border-radius: 8px; border: 1px solid var(--border);">
+          <figcaption style="margin-top: 8px; color: var(--text-secondary); font-size: 0.9em;">Seeed SenseCap T1000-E</figcaption>
+        </figure>
+        <figure style="margin: 0; text-align: center;">
+          <img src="images/ThinkNode-m3.png" alt="Elecrow ThinkNode M3" style="max-width: 280px; width: 100%; border-radius: 8px; border: 1px solid var(--border);">
+          <figcaption style="margin-top: 8px; color: var(--text-secondary); font-size: 0.9em;">Elecrow ThinkNode M3</figcaption>
+        </figure>
+      </div>
 
       <div class="info-box">
         <strong>Regional Frequency</strong>
-        When buying a T-Beam or T-Echo, order the version matching your regional radio frequencies: 868 MHz for Europe, 915 MHz for USA, etc.
+        When buying a T1000E, order the version for <strong>Meshtastic</strong> and also it is matching your regional radio frequencies: 868 MHz for Europe, 915 MHz for USA, etc.
       </div>
 
-      <h3 id="buzzer">Piezo Buzzer</h3>
-      <p>Attach a passive piezo buzzer to the T-Beam for audible collision warnings. A suitable buzzer is the Murata PKM22EPPH4001-B0 or "22x4mm AC With Lead Passive Piezo Electronic Alarm Buzzer 2204".</p>
-      <p>Connect between GPIO pins 14 and 15 in series with a 100-ohm resistor. The two-pin push-pull arrangement yields louder beeping than connecting between one pin and ground.</p>
-      <p>Beeps are higher pitched, shorter, and more numerous for higher alarm levels. If more than one aircraft is a collision danger, the beeps are split into double-beeps.</p>
-
       <h3 id="voice">Voice Warnings</h3>
-      <p>SoftRF can generate voice warnings about traffic in danger of collision, e.g., "traffic, 3 o'clock, low" or "danger, ahead, level". The audio output is from pin 25 (line-level, needs an external amplifier). See the <a href="https://github.com/moshe-braner/SoftRF/blob/master/software/firmware/documentation/audio_output_circuit_.jpg">example circuit</a>.</p>
-
-      <h3 id="antenna">Antenna</h3>
-      <p>A true "dipole" antenna, which does not need a ground plane, may give better performance than the included whip antenna. An antenna with a cable, mounted forward or rearward, should work better than one in the cluttered instrument panel area.</p>
+      <p>SoftRF can generate voice warnings about traffic in danger of collision via built-in Piezo Buzzer</p>
 
     </div>
   </main>
@@ -111,8 +116,8 @@
 <a href="#" class="back-to-top" aria-label="Back to top">&uarr;</a>
 
 <footer class="site-footer">
-  <p>SoftRF-PG Documentation &mdash; Based on Moshe Braner's SoftRF (version MB174)</p>
-  <p><a href="https://github.com/slash-bit/SoftRF-PG">GitHub</a></p>
+  <p>SoftRF-PG Documentation &mdash; Based on Vlad Belayev's SoftRF PG (version VB008)</p>
+  <p><a href="https://github.com/slash-bit/SoftRF-T1000"">GitHub</a></p>
 </footer>
 
 <script src="js/main.js"></script>
