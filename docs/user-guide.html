@@ -63,7 +63,13 @@
       <h1>SenseCap T1000E Card User Guide</h1>
 
       <h2 id="power-on">Power On</h2>
-      <p>When you first power on the device, the LED will be solid green, indicating that the battery power is good and the device is <strong>NOT airborne</strong>. The device will beep according to the battery charge level (see below). After battery beeps you will hear Operating Mode indication beeps.</p>
+      <p>Power on by short press on the button. <p>Shortly,  the LED will go solid green, indicating that the battery power is good and the device is <strong>NOT airborne</strong>. </p>
+         <div class="info-box tip">
+        <strong>Tip!</strong>
+        On some newer models of T1000E LED will start blinking orange, indicating it is aquaring a GPS fix.
+      </div>
+      <p>Then straight after Mode - two long or two short beeps, and finally GPS fix aquired tune, which may come slightly later.</p> 
+      <p>The LED will turn solid green after GPS position aquired.</p>
 
       <h2 id="battery-status">Battery Charge Status</h2>
       <p>After switching the device on, the battery charge status is indicated by a sequence of short beeps:</p>
@@ -84,13 +90,17 @@
       </div>
 
       <h2 id="radio-mode">Radio Mode</h2>
-      <p>This device supports three protocols: LEGACY (FLARM), FANET and ADS-L. The selected protocol is indicated by the following beep sequences after the battery charge beeps:</p>
+      <p>This device supports Four main protocols: <p><code>LATEST</code> (latest compatible FLARM)</p>
+       <p><code>FANET </code></p><p><code>ADS-L</code></p>
+       <p><code>PilotAware (PAW)</code></p>
+       <p>The currently running protocol is indicated by the following beep sequences after the battery charge beeps:</p>
       <table>
         <thead><tr><th>Sound</th><th>Protocol</th></tr></thead>
         <tbody>
           <tr><td><strong>Two long tones</strong></td><td>FLARM mode</td></tr>
           <tr><td><strong>Two short tones</strong></td><td>FANET mode</td></tr>
-          <tr><td><strong>One longer tone</strong></td><td>ADS-L mode</td></tr>
+          <tr><td><strong>Four short tones</strong></td><td>ADS-L mode</td></tr>
+          <tr><td><strong>One long tone</strong></td><td>PilotAware mode</td></tr>
         </tbody>
       </table>
 
@@ -111,7 +121,7 @@
 
       <h2 id="changing-settings">Changing Settings on the Go</h2>
       <p>Most of device settings are configurable from the <code>WebApp Configurator</code> more information here <a href="configurator.html">Configurator</a></p>
-       <img src="images/Cinfigurator_Status.png" alt="Configurator WebApp" class="step-img">
+       <img src="images/Configurator_Status.png" alt="Configurator WebApp" class="step-img">
       
       <h2 id="settings-file">Changing Settings via Settings File</h2>
       <p>All settings are stored in a <code>settings.json</code> file on the device's USB storage. To edit it:</p>
@@ -379,14 +389,17 @@
 
       <h2 id="firmware-update">Updating Firmware</h2>
       <ol>
-        <li>Download the latest <code>.uf2</code> firmware file from <a href="https://github.com/moshe-braner/SoftRF/tree/master/software/firmware/binaries/nRF52840/SoftRF/MassStorage">the binaries page</a>.</li>
+        <li>Download the latest <code>.uf2</code> firmware file from <a href="https://github.com/slash-bit/SoftRF-T1000/releases">the Releases page</a>.</li>
         <li>Connect the T1000E Card to your PC/Mac via USB while powered on.</li>
-        <li>Delete any large files on the drive to free space, then eject the drive (keep the cable connected).</li>
-        <li>Double-click the RESET button &mdash; a drive named <strong>NRF52BOOT</strong> appears.</li>
-        <li>Drag the <code>.uf2</code> file onto the NRF52BOOT drive.</li>
+        <li>Hold the button and double-flick the mgnetic connector &mdash; a drive named <strong>T1000</strong> appears. There will be three files on it.</li>
+        <li>Drag the <code>.uf2</code> file onto the T1000-E drive.</li>
         <li>Wait approximately 30 seconds for the transfer and automatic reboot.</li>
-        <li>The device will restart with the new firmware. Reconnect and verify settings are intact.</li>
+        <li>Press Power button momentarily to start the device.</li>
       </ol>
+            <div class="info-box warning">
+        <strong>Windows error</strong>
+        Sometime the update and shudown happens so quick the Windos pops an error, saying file couldn't be copied. You can ignore this error.
+      </div>
 
       <h2 id="fanet">FANET Features</h2>
       <p>When operating in FANET mode, the T1000E broadcasts position and status data over the FANET radio network &mdash; a low-power mesh used by paragliders, hang-gliders, and mountain sport pilots. Your position, name, and status are visible in real time on compatible apps and devices including <strong>Skytraxx</strong>, <strong>Oudie N</strong>, <strong>XC Guide</strong>, <strong>GXAircom</strong>, <strong>BurnAir Map</strong>, and <strong>Puretrack</strong>.</p>
@@ -411,7 +424,7 @@
       <p>The transition between modes is automatic. No pilot action is needed.</p>
 
       <h3 id="fanet-ground-states">Ground Tracking States</h3>
-      <p>While in Ground Tracking (2D) mode the device broadcasts one of several status values that describe what the pilot is doing on the ground. These states are visible as labels or icons on <strong>Skytraxx</strong>, <strong>Oudie N</strong>, <strong>XC Guide</strong>, and <strong>BurnAir Map</strong>:</p>
+      <p>While in Ground Tracking (2D) mode the device broadcasts one of several status values that describe what the pilot is doing on the ground. These states are visible as labels or icons on <strong>Skytraxx</strong>, <strong>Oudie N</strong>, <strong>SkySignals</strong>,<strong>XC Guide</strong>, and <strong>BurnAir Map</strong>:</p>
       <table>
         <thead><tr><th>State</th><th>Meaning</th></tr></thead>
         <tbody>
@@ -455,6 +468,7 @@
       <ul>
         <li>Skytraxx device screens</li>
         <li>Oudie N display</li>
+        <li>SkySignals T1000 Companion App</li>
         <li>XC Guide app map</li>
         <li>GXAircom app</li>
         <li>BurnAir Map</li>
@@ -471,6 +485,7 @@
         <li><strong>GXAircom</strong> app</li>
         <li><strong>Skytraxx</strong> devices</li>
         <li><strong>Oudie N</strong></li>
+        <li><strong>SkySignals T1000 Companion App</strong></li>
         <li><strong>XC Guide</strong> app</li>
       </ul>
       <p>Messages are limited to approximately 60&ndash;80 characters. They are broadcast to all nearby FANET devices within radio range (typically 5&ndash;15 km in open terrain).</p>
