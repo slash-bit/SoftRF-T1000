@@ -52,6 +52,8 @@
         <a href="#nmea-settings">Settings via NMEA</a>
         <a href="#operation-details">Details of Operation</a>
         <a href="#major-changes">Major Changes</a>
+        <a href="#nmea-sentences">NMEA Sentence Reference</a>
+        <a href="#pswsd" class="indent">$PSWSD Wind</a>
         <a href="#known-issues">Known Issues</a>
         <a href="#compiling">Compiling SoftRF</a>
         <a href="#simulator">Flight Simulator</a>
@@ -124,7 +126,7 @@
       <p>Sentence type bitfields (<code>nmea_g</code>, <code>nmea_s</code>, <code>nmea_t</code>, <code>nmea_e</code>):</p>
       <ul>
         <li><code>nmea_g</code>: 1=basic(GGA+RMC), 2=GSA, 4=GST, 8=GSV, F=all</li>
-        <li><code>nmea_s</code>: 1=PGRMZ, 2=LK8EX1, 3=both</li>
+        <li><code>nmea_s</code>: 1=Basic (PGRMZ), 2=LK8EX1, 8=Wind ($PSWSD) &mdash; bits are independent and combinable</li>
         <li><code>nmea_t</code>: 1=PFLAU+PFLAA, 8=PFLAJ, 9=both</li>
         <li><code>nmea_e</code>: 1=tunnel from connected devices, 2=generated (strobe, alarm)</li>
       </ul>
@@ -227,6 +229,41 @@
         <li><strong>Settings file</strong> &mdash; text-based settings.txt replaces binary EEPROM</li>
         <li><strong>Dual-protocol</strong> &mdash; simultaneous FLARM + FANET operation</li>
       </ul>
+
+      <h2 id="nmea-sentences">NMEA Sentence Reference</h2>
+      <p>SoftRF outputs several proprietary NMEA sentences in addition to the standard FLARM set. This section documents them for app developers integrating with SoftRF over serial, USB, or Bluetooth.</p>
+
+      <h3 id="pswsd">$PSWSD &mdash; Wind Speed and Direction</h3>
+      <p>Output when the wind estimator has a confident result. Enabled by setting bit&nbsp;8 (<code>0x08</code>) of <code>nmea_s</code> or <code>nmea2_s</code>. Rate-limited to one sentence every <strong>123 seconds</strong> to avoid flooding slow-baud connections.</p>
+
+      <h4>Sentence format</h4>
+      <pre><code>$PSWSD,SPD,DIR*CS&lt;CR&gt;&lt;LF&gt;</code></pre>
+
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Unit</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>SPD</code></td><td>float, 1 decimal</td><td>knots</td><td>Estimated wind speed</td></tr>
+          <tr><td><code>DIR</code></td><td>integer (0&ndash;359)</td><td>degrees true</td><td>Wind direction the wind is coming <em>from</em></td></tr>
+          <tr><td><code>*CS</code></td><td>2-digit hex</td><td>&mdash;</td><td>Standard NMEA XOR checksum</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Example</h4>
+      <pre><code>$PSWSD,12.3,270*3A</code></pre>
+      <p>Wind of 12.3&nbsp;kt coming from the west (270&deg; true).</p>
+
+      <h4>Notes for app developers</h4>
+      <ul>
+        <li>The sentence is only emitted when the device is <strong>airborne and circling</strong> — wind estimation requires thermalling flight to converge.</li>
+        <li>The 123-second interval means your app should not timeout or discard the data if it does not arrive every few seconds. Treat the last received value as valid until a new one arrives or the connection is lost.</li>
+        <li>The wind direction follows the meteorological convention: <code>270</code> means wind blowing <em>from</em> the west (i.e., a westerly wind).</li>
+        <li>Speed is in <strong>knots</strong>, not m/s. Convert with 1&nbsp;kt&nbsp;= 0.5144&nbsp;m/s if needed.</li>
+        <li>Enable on the Bluetooth output channel by setting <code>nmea_s</code> bit 8 (<code>nmea_s,08</code> for wind only, or <code>nmea_s,0b</code> for Basic + LK8EX1 + Wind combined).</li>
+        <li>The sentence is gated: it is only output when at least one of <code>nmea_s</code> or <code>nmea2_s</code> has bit 8 set <em>and</em> the wind estimator has produced a new result within the last circle.</li>
+      </ul>
+
+      <h4>Related debug sentences</h4>
+      <p>When debug output (<code>nmea_d</code>) is enabled, the wind estimator also outputs lower-level sentences (<code>$PSWGS</code>, <code>$PSWNS</code>, <code>$PSWEW</code>) containing raw circle fit data. These are for developer diagnostics only and their format may change between firmware versions.</p>
 
       <h2 id="known-issues">Known Issues</h2>
       <ul>
