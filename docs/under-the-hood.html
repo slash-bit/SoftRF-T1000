@@ -38,6 +38,7 @@
         <a href="#protocols-mixed" class="indent">Alt Protocol</a>
         <a href="#nmea-output" class="indent">NMEA Output</a>
         <a href="#flight-log-settings" class="indent">Flight Log</a>
+        <a href="#debug-flags" class="indent">Debug Flags</a>
         <a href="#tbeam-settings">T-Beam Only Settings</a>
         <a href="#techo-settings">T-Echo Only Settings</a>
         <a href="#addons">Add-Ons</a>
@@ -154,6 +155,34 @@
         </tbody>
       </table>
 
+
+      <h3 id="debug-flags">debug_flags &mdash; Debug Bitmask</h3>
+      <p>A 24-bit hex value. Each bit enables a specific category of serial console output. Bits can be combined; e.g. <code>000018</code> = DEEPER + LEGACY.</p>
+      <table>
+        <thead><tr><th>Hex</th><th>Name</th><th>What it enables</th></tr></thead>
+        <tbody>
+          <tr><td><code>000001</code></td><td>WIND</td><td>Wind calculation serial output</td></tr>
+          <tr><td><code>000002</code></td><td>PROJECTION</td><td>Wind projection / track extrapolation output</td></tr>
+          <tr><td><code>000004</code></td><td>ALARM</td><td>Alarm calculation detail (requires nmea_d=1)</td></tr>
+          <tr><td><code>000008</code></td><td>LEGACY</td><td>Raw FLARM/Latest packet hex dump on RX &amp; TX</td></tr>
+          <tr><td><code>000010</code></td><td>DEEPER</td><td>RF slot timing, RX/TX sizes, LR1110 packet detail</td></tr>
+          <tr><td><code>000020</code></td><td>DEEPER2</td><td>Traffic helper internals, GNS5892 ADS-B detail</td></tr>
+          <tr><td><code>000040</code></td><td>BLE_TX</td><td>Log every BLE NUS sentence sent (serial console)</td></tr>
+          <tr><td><code>000800</code></td><td>RELAY</td><td>Force relay of all traffic (ignores no_track flag, testing only)</td></tr>
+          <tr><td><code>800000</code></td><td>SIMULATE</td><td>Replay SIM file instead of live GNSS &mdash; see <a href="#simulator">Flight Simulator</a></td></tr>
+        </tbody>
+      </table>
+      <p>Common combinations:</p>
+      <table>
+        <thead><tr><th>Value</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr><td><code>000010</code></td><td>RF slot timing only</td></tr>
+          <tr><td><code>000017</code></td><td>RF timing + Legacy packet dump + Alarm + Wind</td></tr>
+          <tr><td><code>000040</code></td><td>BLE TX log only</td></tr>
+          <tr><td><code>000050</code></td><td>BLE TX log + RF timing</td></tr>
+          <tr><td><code>800000</code></td><td>Flight simulator</td></tr>
+        </tbody>
+      </table>
 
       <h2 id="techo-settings">T-Echo Only Settings</h2>
       <table>
@@ -286,11 +315,10 @@
       </div>
 
       <h3 id="sim-enable">Enabling Simulator Mode</h3>
-      <p>Simulator mode is activated by setting bit <code>0x800000</code> in <code>debug_flags</code>. Add or update this line in <code>settings.txt</code>:</p>
-      <pre><code>debug_flags,800000</code></pre>
-      <p>If you have other debug flags set, OR the values together (e.g., <code>debug_flags,800017</code>). The web interface status page shows <strong>"Warning: simulation mode (debug_flag 800000)"</strong> when the flag is active. The OLED display shows <strong>SIM</strong> in the top-right corner.</p>
+      <p>Simulator mode is activated by setting bit <code>0x00800000</code> in <code>debug_flags</code> in Advanced Tab of Configurator App. Or update in  <code>settings.txt</code>:</p>
+      <pre><code>debug_flags,00800000</code></pre>
       <p>The simulator starts replaying the file approximately 40 seconds after boot, giving the system time to initialise. It will then advance one simulated second at a time, paced by the device clock.</p>
-      <p>To return to normal operation, remove the flag (set <code>debug_flags,000000</code> or delete the line) and reboot.</p>
+      <p>To return to normal operation, remove the flag (set <code>debug_flags,00000000</code> or delete the line) and reboot.</p>
 
       <h3 id="sim-files">Simulation Files</h3>
       <p>Two plain-text files drive the simulator. Both go in the <code>logs/</code> folder of the storage medium:</p>
