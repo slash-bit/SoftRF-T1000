@@ -257,7 +257,9 @@
               <code>"NONE"</code> &mdash; no alarms<br>
               <code>"DISTANCE"</code> &mdash; alarm based on proximity only<br>
               <code>"VECTOR"</code> &mdash; alarm based on closing vector<br>
-              <code>"LATEST"</code> &mdash; full FLARM-style prediction including curved paths (recommended)
+              <code>"LATEST"</code> &mdash; full FLARM-style prediction including curved paths (recommended)<br>
+              <code>"PG_HILL"</code> &mdash; as Latest, with hill-soaring suppression after take-off (PG/HG only)<br>
+              <code>"PG_NONE"</code> &mdash; as Distance, but never alerts on other paragliders/hang gliders
             </td>
           </tr>
 
@@ -376,6 +378,15 @@
         <strong>Ground Testing</strong>
         SoftRF does not generate collision warnings while on the ground. It does give warnings for one minute after boot and first GNSS fix, to allow testing before a flight.
       </div>
+
+      <h3>Paraglider / Hang Glider Alarm Modes</h3>
+      <p>Two additional alarm modes are available for paragliders and hang gliders:</p>
+      <dl>
+        <dt><code>"PG_HILL"</code> &mdash; Hill-soaring filter</dt>
+        <dd>Uses the same full prediction as <code>LATEST</code>, but suppresses all collision alerts immediately after take-off while the pilot is hill-soaring near the launch site. Suppression lifts automatically once you are more than <strong>2 km horizontally</strong> or <strong>1000 m (3000 ft) vertically</strong> from the take-off point. After that threshold the alarm works identically to <code>LATEST</code> for the rest of the flight. Only activates when the device aircraft type is set to paraglider or hang glider; other types get full alerts from the moment of take-off.</dd>
+        <dt><code>"PG_NONE"</code> &mdash; PG-to-PG filter</dt>
+        <dd>Uses distance-based alarms, but never generates an alert from another paraglider or hang glider when your own aircraft type is set to paraglider or hang glider. Useful when flying in a crowded PG site where constant PG-to-PG alerts would be distracting. Aircraft of all other types (gliders, powered, drones, &hellip;) still produce full alerts.</dd>
+      </dl>
 
       <h2 id="flight-logging">Flight Logging</h2>
       <p>The T1000E Card logs IGC-format flight tracks to its internal flash storage. Logs are accessible by connecting the device to a PC/Mac via USB.</p>
