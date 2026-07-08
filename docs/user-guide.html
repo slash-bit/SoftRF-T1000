@@ -373,9 +373,9 @@
       <p>Two additional alarm modes are available for paragliders and hang gliders:</p>
       <dl>
         <dt><code>"PG_HILL"</code> &mdash; Hill-soaring filter</dt>
-        <dd>Uses the same full prediction as <code>LATEST</code>, but suppresses all collision alerts immediately after take-off while the pilot is hill-soaring near the launch site. Suppression lifts automatically once you are more than <strong>2 km horizontally</strong> or <strong>1000 m (3000 ft) vertically</strong> from the take-off point. After that threshold the alarm works identically to <code>LATEST</code> for the rest of the flight. Only activates when the device aircraft type is set to paraglider or hang glider; other types get full alerts from the moment of take-off.</dd>
+        <dd>Uses <code>LATEST</code> (full curved-path prediction) for all aircraft. While within <strong>2 km horizontally</strong> and <strong>1000 m (3000 ft) vertically</strong> of the take-off point, all alerts are suppressed to avoid nuisance alarms during the hill-soaring phase. Once clear of the launch area, <code>LATEST</code> applies to hang gliders and all other traffic; <code>DISTANCE</code> applies to other <em>paragliders</em> only (to reduce false alarms from slower thermalling traffic). Activates when own aircraft type is set to paraglider or hang glider.</dd>
         <dt><code>"PG_NONE"</code> &mdash; PG-to-PG filter</dt>
-        <dd>Uses distance-based alarms, but never generates an alert from another paraglider or hang glider when your own aircraft type is set to paraglider or hang glider. Useful when flying in a crowded PG site where constant PG-to-PG alerts would be distracting. Aircraft of all other types (gliders, powered, drones, &hellip;) still produce full alerts.</dd>
+        <dd>Uses <code>LATEST</code> for hang gliders and all other aircraft. Other <em>paragliders</em> use <code>DISTANCE</code>. Hang gliders are faster-moving aircraft and always produce full <code>LATEST</code> alerts. Useful in crowded PG sites where paraglider-to-paraglider alerts would be distracting.</dd>
       </dl>
 
       <h2 id="flight-logging">Flight Logging</h2>
