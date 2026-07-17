@@ -1,0 +1,45 @@
+name: Publish latest binary
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  copy-binary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Find, download, and rename release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ASSET_NAME=$(gh release view "${{ github.event.release.tag_name }}" --json assets -q '.assets[] | select(.name | endswith(".uf2")) | .name' | head -n1)
+          if [ -z "$ASSET_NAME" ]; then
+            echo "No .uf2 asset found on this release"
+            exit 1
+          fi
+          echo "Found asset: $ASSET_NAME"
+          gh release download "${{ github.event.release.tag_name }}" -p "$ASSET_NAME" -O downloaded.uf2 --clobber
+
+          # SoftRF-VB008-w-dev.uf2 -> SoftRF-VB008-dev.uf2
+          STRIPPED_NAME=$(echo "$ASSET_NAME" | sed -E 's/-[a-zA-Z](-dev)?\.uf2$/\1.uf2/')
+          echo "STRIPPED_NAME=$STRIPPED_NAME" >> "$GITHUB_ENV"
+
+          mkdir -p Binaries
+          cp downloaded.uf2 "Binaries/$STRIPPED_NAME"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "Binaries/${STRIPPED_NAME}"
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "Update Binaries/${STRIPPED_NAME} from release ${{ github.event.release.tag_name }}"
+          git push
