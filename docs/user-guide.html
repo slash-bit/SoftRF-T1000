@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>T1000E Card User Guide - SoftRF-PG Docs</title>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  .step-img {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    margin: 16px 0;
+    max-width: 100%;
+    height: auto;
+  }
+  .step-img.phone {
+    max-width: 300px;
+    width: 100%;
+    display: block;
+  }
+</style>
 </head>
 <body>
 
@@ -44,6 +59,10 @@
         <a href="#collision-alarms">Collision Alarms</a>
         <a href="#flight-logging">Flight Logging</a>
         <a href="#firmware-update">Updating Firmware</a>
+        <a href="#fw-update-configurator" class="indent">Update Prompt in Configurator</a>
+        <a href="#fw-update-usb" class="indent">Method 1: USB Cable</a>
+        <a href="#fw-update-ota" class="indent">Method 2: OTA (Bluetooth)</a>
+        <a href="#fw-update-manual" class="indent">Manual USB Update</a>
         <a href="#fanet">FANET Features</a>
         <a href="#fanet-tracking" class="indent">Ground vs Flight Tracking</a>
         <a href="#fanet-ground-states" class="indent">Ground Tracking States</a>
@@ -389,6 +408,70 @@
       <p>Alarm events can be logged separately by setting <code>"alarmlog": "YES"</code>. The resulting <code>alarmlog.txt</code> can be visualised using the <a href="alarm-viewer.html">Alarm Log Viewer</a> tool.</p>
 
       <h2 id="firmware-update">Updating Firmware</h2>
+
+      <h3 id="fw-update-configurator">Update Prompt in the Configurator</h3>
+      <p>When you connect to your device with the <a href="configurator.html">SoftRF Configurator</a>, the <strong>Status</strong> page checks for a newer firmware version. If one is available, a <strong>Firmware Update Available</strong> card appears showing your current version, the latest version and its release notes.</p>
+
+      <img src="images/OTA_1_Configurator_update.jpeg" alt="Firmware update available card on the Configurator Status page" class="step-img phone">
+
+      <p>There are two ways to update:</p>
+      <ul>
+        <li><strong>Method 1 &mdash; USB cable:</strong> buttons <strong>1</strong> <em>Download .uf2</em> and <strong>2</strong> <em>Enter DFU Mode</em>.</li>
+        <li><strong>Method 2 &mdash; OTA over Bluetooth:</strong> button <strong>3</strong> <em>Upgrade via OTA (BLE)</em>. This button only appears when the Configurator is connected to the device via Bluetooth.</li>
+      </ul>
+
+      <h3 id="fw-update-usb">Method 1: Update via USB Cable</h3>
+      <ol>
+        <li>Tap <strong>Download .uf2</strong> to download the correct firmware file for your device.</li>
+        <li>Tap <strong>Enter DFU Mode</strong>. The device disconnects and restarts into USB update (DFU) mode.</li>
+        <li>Plug the device into your PC/Mac or Android phone with a USB cable. A drive named <strong>T1000-E</strong> appears.</li>
+        <li>Continue from step 4 of the <a href="#fw-update-manual">USB update instructions below</a>.</li>
+      </ol>
+
+      <h3 id="fw-update-ota">Method 2: Update via OTA (Bluetooth)</h3>
+      <p>No cable needed &mdash; the firmware is sent from your phone to the device over Bluetooth.</p>
+
+      <h4>Step 1: Start the OTA update</h4>
+      <p>On the update card, tap <strong>Upgrade via OTA (BLE)</strong> (button 3 in the screenshot above).</p>
+
+      <h4>Step 2: Check the prerequisites</h4>
+      <p>A window lists what must be in place before you continue:</p>
+      <ul>
+        <li><strong>Bootloader 0.11 or later</strong> installed on the device. This is a one-time USB step &mdash; see <a href="getting-started.html#step3">Getting Started, Step 3</a>.</li>
+        <li>SoftRF firmware <strong>VB008-z5 or later</strong> already running on the device.</li>
+        <li>The <strong>nRF Device Firmware Update</strong> (DFU) app installed on your phone &mdash; use the <strong>Google Play</strong> or <strong>App Store</strong> buttons in the window.</li>
+      </ul>
+      <p>If all of these are met, tap <strong>Continue</strong>. The device disconnects and restarts into Bluetooth update mode.</p>
+
+      <img src="images/OTA_2_Prerequisites.jpeg" alt="OTA prerequisites window" class="step-img phone">
+
+      <h4>Step 3: Download the firmware</h4>
+      <p>The firmware package (<code>SoftRF.ino.zip</code>) is downloaded and you are asked how to open it.</p>
+      <ul>
+        <li><strong>iPhone:</strong> a share sheet opens. The best option is <strong>Chrome</strong> / <strong>Open in Chrome</strong>. When prompted, choose <strong>Save in Files</strong>, then open the downloaded file with <strong>Open in&hellip;</strong>.</li>
+        <li><strong>Android:</strong> tap the download notification to open the file.</li>
+      </ul>
+
+      <img src="images/OTA_3_Download_firmware.jpeg" alt="Share sheet with Open in Chrome highlighted" class="step-img phone">
+
+      <h4>Step 4: Open the file with the DFU app</h4>
+      <p>From the list of apps, choose <strong>DFU</strong>.</p>
+
+      <img src="images/OTA_4_Open_with_DFU.jpeg" alt="Open in menu with DFU app highlighted" class="step-img phone">
+
+      <h4>Step 5: Select the target device</h4>
+      <p>The DFU app opens with the firmware file already filled in under <strong>File</strong>. Under <strong>Device</strong>, tap <strong>Select</strong> and choose <strong>AdaDFU</strong> from the list of Bluetooth devices.</p>
+
+      <img src="images/OTA_5_Select_target_AdaDFU.jpeg" alt="DFU app with firmware file and AdaDFU device selected, ready to upload" class="step-img phone">
+
+      <h4>Step 6: Install the firmware</h4>
+      <p>Tap <strong>Upload</strong> to start the installation. The progress bar moves until the update is complete &mdash; keep the phone close to the device and leave the app open.</p>
+
+      <img src="images/OTA_6_Install_progress.jpeg" alt="DFU app uploading firmware to AdaDFU" class="step-img phone">
+
+      <p>At the end of the update the device shuts down. Press the Power button to start it again.</p>
+
+      <h3 id="fw-update-manual">Manual USB Update</h3>
       <ol>
         <li>Download the latest <code>.uf2</code> firmware file from <a href="https://github.com/slash-bit/SoftRF-T1000/releases">the Releases page</a>.</li>
         <li>Connect the T1000E Card to your PC/Mac via USB while powered on.</li>
