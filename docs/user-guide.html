@@ -69,6 +69,7 @@
         <a href="#fanet-sos" class="indent">SOS &mdash; Pilot in Distress</a>
         <a href="#fanet-name" class="indent">FANET Name</a>
         <a href="#fanet-messages" class="indent">FANET Messages</a>
+        <a href="#fanet-forwarding" class="indent">Forwarding (Relay)</a>
         <a href="#fanet-weather" class="indent">Weather Stations</a>
         <a href="#app-matrix">Compatible App Matrix</a>
         <a href="#registration">Registering Your ID</a>
@@ -516,9 +517,10 @@
           <tr><td><strong>Active</strong></td><td>On the ground, moving (walking to launch, packing up)</td></tr>
           <tr><td><strong>Idle</strong></td><td>On the ground, stationary</td></tr>
           <tr><td><strong>Finished</strong></td><td>Flight completed, pilot has landed and is done for the day</td></tr>
+          <tr><td><strong>Landed OK</strong></td><td>Pilot has landed and is fine. Also set when an SOS is ended or the auto-SOS countdown is cancelled.</td></tr>
           <tr><td><strong>Need a Ride</strong></td><td>Pilot is landed out and needs retrieval</td></tr>
           <tr><td><strong>Need Technical Support</strong></td><td>Pilot has a technical issue (equipment problem, not an emergency)</td></tr>
-          <tr><td><strong>Distress</strong></td><td>Emergency &mdash; pilot needs urgent help. See <a href="#fanet-sos">SOS section</a> below.</td></tr>
+          <tr><td><strong>Distress</strong></td><td>Emergency &mdash; pilot needs urgent help. Set by a button double-click after a 10&nbsp;s countdown, by auto-SOS, or from an app. See <a href="#fanet-sos">SOS section</a> below.</td></tr>
         </tbody>
       </table>
 
@@ -583,6 +585,37 @@
         <li><strong>XC Guide</strong> app</li>
       </ul>
       <p>Messages are limited to approximately 60&ndash;80 characters. They are broadcast to all nearby FANET devices within radio range (typically 5&ndash;15 km in open terrain).</p>
+      <p>A personal message sent to you is confirmed back to the sender (<em>"Message delivered"</em>) as soon as your device receives it, even when no app is connected. If the message was relayed, the confirmation and any reply are relayed back too (see <a href="#fanet-forwarding">Forwarding</a>).</p>
+
+      <h3 id="fanet-forwarding">FANET Forwarding (Relay)</h3>
+      <p>In the mountains a ridge or valley often blocks the radio path between two pilots. A device higher up can still hear both, so it can <strong>relay</strong> (forward) FANET packets from a pilot who is hard to hear. That pilot then shows up on devices and apps that could not receive them directly.</p>
+      <p>Forwarding works only in <strong>FANET-only mode</strong> (main protocol FANET, no second protocol) with the transmitter on. It is automatic; no settings are needed.</p>
+
+      <h4>What is relayed</h4>
+      <p>A relay is only useful when your device is higher than the sender. "Below you" means the sender's altitude is at least that much lower than yours.</p>
+      <table>
+        <thead><tr><th>Packet</th><th>Relayed when</th><th>How often</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Flying pilot</strong> (Flight Tracking)</td><td>More than 10&nbsp;km away, <em>or</em> at least 1000&nbsp;m below you</td><td>At most every 10&nbsp;s. With 5 or more FANET devices around: once per minute per pilot. More than 10 devices: not relayed.</td></tr>
+          <tr><td><strong>Pilot in distress</strong> (Ground Tracking: Need medical help, Distress)</td><td>At least 100&nbsp;m below you, any distance</td><td>Once per minute per pilot</td></tr>
+          <tr><td><strong>Landed pilot</strong> (Ground Tracking: Landed OK, Need a Ride)</td><td>At least 300&nbsp;m below you, any distance</td><td>Once per minute per pilot</td></tr>
+          <tr><td><strong>Personal message</strong></td><td>Sent to a pilot your device can hear, from a pilot at least 500&nbsp;m below you</td><td>Every message. Replies and delivery confirmations between the two pilots are relayed back for the next 5 minutes.</td></tr>
+        </tbody>
+      </table>
+      <p>Not relayed: other ground states (walking, vehicle, &hellip;), messages to everyone, and pilot names. If a pilot's altitude is not known (no flight tracking heard from them yet), ground states and messages are relayed anyway.</p>
+
+      <h4>How it avoids clutter</h4>
+      <ul>
+        <li><strong>One relay step only.</strong> A relayed packet is never relayed again, so packets cannot bounce around the network.</li>
+        <li><strong>The best-placed device goes first.</strong> Before relaying, each device waits a short time (up to 1&ndash;2&nbsp;s). The higher it is above the sender, or the farther away the sender, the shorter it waits. When the other devices hear that relay, they drop their own copy, so usually only one device relays each packet.</li>
+        <li><strong>Less relaying in crowds.</strong> With many FANET devices around, flying pilots are relayed less often, and not at all above 10 devices, to keep the radio channel free.</li>
+        <li><strong>Urgent first.</strong> Messages, delivery confirmations and distress states take priority over relaying a flying pilot's position.</li>
+      </ul>
+
+      <div class="info-box tip">
+        <strong>Your own position</strong>
+        Your own device marks its packets so that other devices may relay them once. Relaying does not change how often your own position is sent.
+      </div>
 
       <h3 id="fanet-weather">Weather Stations</h3>
       <p>FANET weather stations (installed at launch sites and mountain passes) broadcast local conditions over the FANET network including wind speed, wind direction, temperature, and humidity. The T1000E receives these broadcasts automatically whenever it is in FANET mode.</p>
