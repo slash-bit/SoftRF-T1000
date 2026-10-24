@@ -167,7 +167,7 @@
   "volume": "FULL",
   "ignore_id": "000000",
   "alarmlog": "YES",
-  "auto_sos": "NO",
+  "auto_sos": "OFF",
   "logflight": "AIRBORNE",
   "loginterval": 4,
   "igc_pilot": "Chuck Yeager",
@@ -311,8 +311,8 @@
 
           <tr>
             <td><code>auto_sos</code></td>
-            <td>Automatically broadcast an SOS/distress signal if the device detects a crash (sudden stop after airborne movement).</td>
-            <td><code>"YES"</code>, <code>"NO"</code></td>
+            <td>SOS / pilot in distress. <code>"MANUAL"</code>: double-click the button to start SOS (after a 10&nbsp;s countdown). <code>"AUTO"</code>: as MANUAL, plus a 3-minute countdown after landing that activates SOS unless cancelled. See <a href="#fanet-sos">SOS section</a>.</td>
+            <td><code>"OFF"</code>, <code>"MANUAL"</code>, <code>"AUTO"</code></td>
           </tr>
 
           <tr>
@@ -525,22 +525,32 @@
       <h3 id="fanet-sos">SOS &mdash; Pilot in Distress</h3>
       <p>The SOS feature broadcasts an emergency signal when a pilot needs urgent assistance after a crash or injury.</p>
 
+      <p>The button works for SOS when <code>"auto_sos"</code> in <code>settings.json</code> is <code>"MANUAL"</code> or <code>"AUTO"</code>. With <code>"OFF"</code> (the default), double-click does nothing for SOS.</p>
+
       <h4>Manual activation</h4>
-      <p><strong>Double-click</strong> the button while on the ground to toggle the SOS state on or off. When SOS is active:</p>
-      <ul>
-        <li>The device switches to <strong>Ground Tracking (2D)</strong> mode and broadcasts the <strong>Distress</strong> ground state.</li>
-        <li>A <strong>FANET message</strong> is broadcast over the radio network: <em>"SOS! Pilot in Distress"</em> together with the pilot's GPS coordinates, so nearby pilots and rescue teams can locate you.</li>
-        <li>The Distress status and coordinates appear on <strong>BurnAir Map</strong>, <strong>Skytraxx</strong>, <strong>Oudie N</strong>, and <strong>XC Guide</strong>.</li>
-      </ul>
-      <p>To <strong>cancel</strong> SOS, double-click the button again. The device returns to normal operation.</p>
+      <p><strong>Double-click</strong> the button. SOS does not start straight away &mdash; first a <strong>10-second countdown</strong> runs, so an accidental double-click does not raise an alarm:</p>
+      <table>
+        <thead>
+          <tr><th>Time</th><th>What happens</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0 s &mdash; double-click</td><td>Countdown starts: the red LED blinks and the device beeps, both getting faster.</td></tr>
+          <tr><td>During the countdown</td><td><strong>Double-click again to cancel.</strong> One low beep confirms; the device carries on as before. Nothing is broadcast.</td></tr>
+          <tr><td>10 s</td><td>SOS is active. The device broadcasts the <strong>Distress</strong> ground state (Ground Tracking) repeatedly, switches its radio to FANET if needed, and beeps SOS in Morse code (&middot;&middot;&middot; &minus;&minus;&minus; &middot;&middot;&middot;) with red/green LEDs.</td></tr>
+          <tr><td>25 s (15 s after SOS starts)</td><td>One <strong>FANET text message</strong> is broadcast: <em>"SOS Pilot in DISTRESS"</em> with your GPS coordinates and altitude.</td></tr>
+        </tbody>
+      </table>
+      <p>The Distress ground state is sent first and repeated, so receivers can show the alarm straight away. The text message follows once, 15 seconds later, as a confirmation with your position. The Distress status and coordinates appear on <strong>BurnAir Map</strong>, <strong>Skytraxx</strong>, <strong>Oudie N</strong>, and <strong>XC Guide</strong>.</p>
+      <p>To <strong>end</strong> SOS, double-click the button again. The device switches to <strong>Landed OK</strong> and returns to its original radio protocol. If the SOS text message had already been sent, a <em>"Cancelled SOS"</em> message follows so others know the alarm is over.</p>
 
       <h4>Automatic activation (auto_sos)</h4>
-      <p>If <code>"auto_sos": "YES"</code> is set in <code>settings.json</code>, the device monitors for a crash event (sudden stop after airborne movement). If a potential crash is detected:</p>
+      <p>If <code>"auto_sos": "AUTO"</code> is set in <code>settings.json</code>, the device starts a countdown when it detects that you have landed:</p>
       <ol>
-        <li>The device starts beeping to alert the pilot that SOS will activate.</li>
-        <li>The pilot has <strong>3 minutes</strong> to double-click the button to confirm they are OK and cancel the countdown.</li>
-        <li>If no action is taken within 3 minutes, SOS activates automatically &mdash; broadcasting Distress status and the location message as described above.</li>
+        <li>The device starts beeping and blinking red to alert you that SOS will activate.</li>
+        <li>You have <strong>3 minutes</strong> to double-click the button to confirm you are OK. This cancels the countdown and sets <strong>Landed OK</strong>.</li>
+        <li>If no action is taken within 3 minutes, SOS activates automatically &mdash; the Distress state at once, the text message 15 seconds later, as described above.</li>
       </ol>
+      <p>SOS started from an app (for example XC Guide setting a Distress ground state) works the same way: Distress at once, the text message 15 seconds later.</p>
 
       <div class="info-box warning">
         <strong>Test SOS carefully</strong>
