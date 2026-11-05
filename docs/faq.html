@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Troubleshooting / FAQ - SoftRF-PG Docs</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .faq-q {
+    scroll-margin-top: 80px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      SoftRF-PG Docs
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About SoftRF</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="user-guide.html">T1000E Card User Guide</a>
+      <a href="under-the-hood.html">Under the Hood</a>
+      <a href="configurator.html">Configurator</a>
+      <a href="alarm-viewer.html">Alarm Viewer</a>
+      <a href="faq.html" class="active">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-title">On this page</div>
+      <nav class="sidebar-nav">
+        <a href="#updating">Installing &amp; Updating</a>
+        <a href="#frozen" class="indent">Device frozen / won't switch off</a>
+        <a href="#windows-error" class="indent">Windows copy errors</a>
+        <a href="#dont-recopy" class="indent">LED flickering during update</a>
+        <a href="#check-version" class="indent">Which firmware is installed?</a>
+        <a href="#mac" class="indent">Setting up from a Mac</a>
+        <a href="#tracking">Tracking</a>
+        <a href="#not-on-map" class="indent">Not on Puretrack / OGN</a>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-card">
+
+      <h1>Troubleshooting / FAQ</h1>
+      <p>Answers to the questions that come up most often in the <a href="https://t.me/+OUWkJM1gCm9lNzQ8">Telegram group</a>. For normal use of the device, see the <a href="user-guide.html">T1000E Card User Guide</a>.</p>
+
+      <h2 id="updating">Installing &amp; Updating</h2>
+
+      <h3 id="frozen" class="faq-q">The device is frozen, the LED is pulsing or solid, and it won't switch off</h3>
+      <p>First, reset it: <strong>hold the button and attach the magnetic connector</strong> while the cable is plugged into a powered USB port.</p>
+      <p>If a drive named <strong>T1000-E</strong> appears on your computer, the card is stuck in update (DFU) mode. Copy the firmware <code>.uf2</code> file onto that drive again and let the update finish.</p>
+      <div class="info-box">
+        <strong>Note</strong>
+        A card in DFU mode can't be switched off with the button. If you can't get it out of DFU mode, letting the battery run flat will also reset it, but this can take about 4 days.
+      </div>
+
+      <h3 id="windows-error" class="faq-q">Windows says "file couldn't be copied", "device disappeared" or error 0x80070022</h3>
+      <p>This is normal. The card installs the firmware and restarts so quickly that Windows loses the drive before it finishes the copy. The update has worked; press the button to start the device.</p>
+      <p>The one real problem to look out for is a <strong>broken download</strong>. If the firmware <code>.uf2</code> file is much smaller than about 900&nbsp;KB (for example around 220&nbsp;KB), or still has a <code>.crdownload</code> extension, the download was cut short. Download it again. The same applies to the bootloader flasher <code>.exe</code>, which should be about 15&nbsp;MB.</p>
+
+      <h3 id="dont-recopy" class="faq-q">The LED is flickering after I copied the firmware. Should I copy it again?</h3>
+      <p><strong>No.</strong> The flickering LED means the firmware is still being written. Wait until the card switches itself off (up to about 30 seconds), then press the button to start it. Copying the file again or unplugging the card during this time can leave it stuck in update mode (see <a href="#frozen">above</a>).</p>
+
+      <h3 id="check-version" class="faq-q">How do I check which firmware is installed?</h3>
+      <p>Open the <strong>Status</strong> page of the <a href="configurator.html">Configurator</a>. It shows the running firmware version and tells you if a newer one is available.</p>
+      <p>Don't rely on <code>sw_version</code> in <code>settings.json</code>: it is only updated when settings are saved, so after an update it can still show the old version.</p>
+
+      <h3 id="mac" class="faq-q">Can I set up a brand-new card from a Mac?</h3>
+      <p>Yes. The <a href="https://skysignals.app/mysoftrf/flasher.html">online Bootloader Flasher</a> runs in the browser and works on a Mac as well as on Windows, so you don't need the Windows <code>.exe</code> flasher. After flashing the bootloader, continue with the SoftDevice and firmware steps in <a href="getting-started.html#step3">Getting Started</a>.</p>
+
+      <h2 id="tracking">Tracking</h2>
+
+      <h3 id="not-on-map" class="faq-q">Why can't I see myself on Puretrack or OGN?</h3>
+      <p>Check these in order:</p>
+      <ol>
+        <li><strong>Is a ground station in range?</strong> The card transmits at low power, and the signal needs a clear line of sight to an OGN or PilotAware ground station. On the ground, hills, buildings and your own body often block it. In the air it usually works without problems. Check the nearest stations on the <a href="https://airspacearound.me.uk/stations/">ground station map</a>.</li>
+        <li><strong>Is your ID registered?</strong> Register the ID shown in the Configurator on <a href="https://ddb.glidernet.org/">OGN DDB</a> (device type FLARM) and on <a href="https://puretrack.io/">Puretrack</a>. A new registration can take until the next day to appear. If you upgraded from v007, your ID has probably changed to <code>88xxxx</code> &mdash; see <a href="user-guide.html#id-change">Your aircraft ID</a>.</li>
+        <li><strong>Does Puretrack hide you?</strong> Turn on <em>Show Unidentified</em> labels in Puretrack, or link your ID to your Puretrack account.</li>
+        <li><strong>Flying FANET only?</strong> FANET range to ground stations is often shorter than FLARM. Another pilot's Skytraxx or Oudie can also forward your FANET position to OGN.</li>
+      </ol>
+      <p>You don't need to be airborne to be tracked: the card transmits from power-on. The airborne state only controls the alarms and flight logging.</p>
+      <p>To see after a flight where and how far you were received:</p>
+      <ul>
+        <li><a href="https://airspacearound.me.uk/ogn_tools/">OGN range analyser</a> &mdash; all protocols, UK only</li>
+        <li><a href="https://data.pilotaware.com/vector/">PilotAware Vector</a> &mdash; FLARM only</li>
+        <li><a href="https://ktrax.kisstech.ch/">KTrax</a> &mdash; FLARM only</li>
+      </ul>
+
+    </div>
+  </main>
+</div>
+
+<a href="#" class="back-to-top" aria-label="Back to top">&uarr;</a>
+
+<footer class="site-footer">
+  <p>SoftRF-PG Documentation</p>
+  <p><a href="https://github.com/slash-bit/SoftRF-T1000">GitHub</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
