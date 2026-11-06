@@ -1,6 +1,6 @@
 {
-  "versionCode": 806,
-  "versionName": "SoftRF-VB008-z6",
-  "apkUrl": "https://github.com/slash-bit/SoftRF-T1000/blob/main/Binaries/SoftRF-VB008-dev.uf2",
-  "notes": "FANET: Cancel SOS message when deactivated, OTA upgrade from SkySignals app"
+  "versionCode": 812,
+  "versionName": "SoftRF-VB008-z12",
+  "apkUrl": "https://github.com/slash-bit/SoftRF-T1000/raw/main/Binaries/SoftRF.ino.zip",
+  "notes": "One firmware for T1000E, T-Echo and TN-M3; LR1110 (T1000E): no more deaf receiver after a protocol switch; FANET sent in the right format; ADS-L: receiving XC Tracer works; New ADS-L + PilotAware protocol pair; PilotAware: frequency fix; FANET forwarding; Settings dump; Settings storage fix"
 }
