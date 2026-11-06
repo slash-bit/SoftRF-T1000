@@ -1,0 +1,51 @@
+name: Copy release assets to Binaries
+
+# When a release is published (or edited), download every asset attached
+# to it and commit them into the Binaries/ folder on main.
+on:
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to copy (e.g. VB008-z12)'
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-binaries
+  cancel-in-progress: false
+
+jobs:
+  copy-binaries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download release assets into Binaries/
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          mkdir -p Binaries
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir Binaries --clobber
+          ls -l Binaries
+
+      - name: Commit and push
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Binaries
+          if git diff --cached --quiet; then
+            echo "Binaries already up to date for $TAG"
+            exit 0
+          fi
+          git commit -m "Binaries: add release assets from $TAG"
+          git push origin HEAD:main
